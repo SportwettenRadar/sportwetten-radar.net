@@ -160,6 +160,13 @@ h1, h2, h3 {
   position: relative;
   padding: 96px 0 88px;
   overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background-image:
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
@@ -170,7 +177,7 @@ h1, h2, h3 {
 }
 .hero-inner {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 48px;
