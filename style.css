@@ -152,6 +152,8 @@ h1, h2, h3 {
 .nav-toggle { display: none; }
 
 @media (max-width: 760px) {
+  .nav-logo img { width: 42px; height: 42px; }
+  .nav-logo .wordmark { font-size: 22px; }
   .nav-links { display: none; }
   .nav-toggle {
     display: inline-flex;
@@ -294,6 +296,10 @@ h1, h2, h3 {
    Sections
    ============================================================ */
 section { padding: 84px 0; }
+@media (max-width: 760px) {
+  .hero { padding-bottom: 32px; }
+  #produkt { padding-top: 36px; }
+}
 .section-head { max-width: 60ch; margin-bottom: 48px; }
 .section-head h2 { font-size: clamp(30px, 4vw, 42px); margin-top: 14px; }
 .section-head p { color: var(--text-muted); font-size: 16.5px; margin-top: 14px; }
@@ -371,6 +377,23 @@ section { padding: 84px 0; }
 .risk-box .eyebrow::before { background: var(--warn); box-shadow: 0 0 0 3px var(--warn-soft); }
 .risk-box h2 { font-size: 28px; margin-top: 12px; }
 .risk-box p { color: var(--text-muted); margin-top: 14px; font-size: 15.5px; max-width: 62ch; }
+
+.highlight-box {
+  background: var(--accent-soft);
+  border: 1px solid rgba(46, 230, 166, 0.35);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 34px 36px;
+  margin-top: 28px;
+}
+.highlight-box h3 {
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 10px;
+}
+.highlight-box p { color: var(--text-muted); margin-top: 14px; font-size: 15.5px; max-width: 68ch; }
 .risk-box .hotline {
   margin-top: 20px;
   font-family: var(--font-mono);
