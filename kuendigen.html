@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verträge hier kündigen — Sportwetten Radar</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/logo-icon-small.png" type="image/png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a href="index.html" class="nav-logo"><img src="assets/logo-icon-small.png" alt="Sportwetten Radar Logo"><span class="wordmark"><span class="w1">Sportwetten</span> <span class="w2">Radar</span></span></a>
+    <div class="nav-links">
+      <a href="index.html#produkt">Produkt</a>
+      <a href="index.html#trackrecord">Trackrecord</a>
+      <a href="index.html#preise">Preise</a>
+      <a href="index.html#risiko">Risiko</a>
+      <a href="impressum.html">Impressum</a>
+    </div>
+    <a class="nav-cta" href="https://t.me/KILivewetten_bot" target="_blank" rel="noopener">Zum Kanal →</a>
+  </div>
+</nav>
+
+<div class="legal-header">
+  <div class="wrap">
+    <span class="eyebrow">Kündigung</span>
+    <h1>Verträge hier kündigen</h1>
+  </div>
+</div>
+
+<article class="legal-doc">
+  <a class="back-link" href="index.html">← Zurück zur Startseite</a>
+
+  <p>Hier kannst du dein Abonnement bei Sportwetten Radar ohne Anmeldung kündigen. Fülle das
+  Formular aus und klicke auf „Jetzt kündigen“. Felder mit * sind Pflichtfelder.</p>
+
+  <!--
+    TECHNIK (unsichtbar): data-endpoint ist noch leer. Bis das Backend auf PythonAnywhere steht,
+    öffnet "Jetzt kündigen" eine vorausgefüllte E-Mail an support@sportwetten-radar.net
+    (Übergangslösung). Sobald die Route existiert, hier die URL eintragen, dann wird per POST
+    gesendet und die Kündigung automatisch über Stripe ausgeführt.
+  -->
+  <form class="k-form" id="kform" data-endpoint="" novalidate>
+    <fieldset>
+      <legend>Art der Kündigung *</legend>
+      <label class="k-radio"><input type="radio" name="art" value="ordentlich" checked> Ordentliche Kündigung</label>
+      <label class="k-radio"><input type="radio" name="art" value="außerordentlich"> Außerordentliche Kündigung (aus wichtigem Grund)</label>
+      <div class="k-field k-grund" hidden>
+        <label for="grund">Grund der außerordentlichen Kündigung *</label>
+        <textarea id="grund" name="grund" rows="3"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Zeitpunkt *</legend>
+      <label class="k-radio"><input type="radio" name="zeitpunkt" value="nächstmöglich" checked> Zum nächstmöglichen Zeitpunkt</label>
+      <label class="k-radio"><input type="radio" name="zeitpunkt" value="datum"> Zu einem bestimmten Datum</label>
+      <div class="k-field k-datum" hidden>
+        <label for="datum">Gewünschtes Datum *</label>
+        <input type="date" id="datum" name="datum">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Deine Angaben</legend>
+      <div class="k-field">
+        <label for="name">Vor- und Nachname *</label>
+        <input type="text" id="name" name="name" autocomplete="name" required>
+      </div>
+      <div class="k-field">
+        <label for="email">E-Mail-Adresse, die du bei der Buchung angegeben hast *</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+        <small>An diese Adresse geht die Bestätigung deiner Kündigung.</small>
+      </div>
+      <div class="k-field">
+        <label for="nick">Telegram-Benutzername (optional)</label>
+        <input type="text" id="nick" name="nick" placeholder="@deinname">
+      </div>
+      <div class="k-field">
+        <label for="paket">Gebuchtes Paket (optional)</label>
+        <select id="paket" name="paket">
+          <option value="">– bitte wählen –</option>
+          <option>1 Monat</option><option>3 Monate</option><option>6 Monate</option><option>12 Monate</option>
+        </select>
+      </div>
+    </fieldset>
+
+    <p class="k-error" id="kerror" role="alert" hidden></p>
+    <button type="submit" class="btn-primary k-submit">Jetzt kündigen</button>
+  </form>
+
+  <div class="k-done" id="kdone" hidden>
+    <h2>Deine Kündigung</h2>
+    <p id="kdone-text"></p>
+    <pre class="k-summary" id="ksummary"></pre>
+    <p>Bitte speichere oder drucke diese Seite als Nachweis.</p>
+    <button type="button" class="btn-primary" onclick="window.print()">Seite drucken / speichern</button>
+  </div>
+
+  <h2>Andere Wege zu kündigen</h2>
+  <ul>
+    <li>Im Telegram-Bot mit dem Befehl <strong>/kuendigen</strong></li>
+    <li>Im Kundenportal von Stripe (Link in deinem Zahlungsbeleg)</li>
+    <li>Per E-Mail an <a href="mailto:support@sportwetten-radar.net">support@sportwetten-radar.net</a></li>
+  </ul>
+  <p>Details zu Laufzeit und Kündigung findest du in <a href="agb.html">§ 8 der AGB</a>.</p>
+</article>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>Sportwetten Radar</h4>
+        <p style="color:var(--text-faint); font-size:14px; max-width:32ch;">Datenbasiertes Fußball-Analyse-Tool für Telegram.</p>
+      </div>
+      <div>
+        <h4>Produkt</h4>
+        <ul>
+          <li><a href="index.html#produkt">Live-Wetten</a></li>
+          <li><a href="index.html#produkt">Einzelspiele</a></li>
+          <li><a href="index.html#trackrecord">Trackrecord</a></li>
+          <li><a href="index.html#saison">Saisonkalender</a></li>
+          <li><a href="index.html#preise">Preise</a></li>
+          <li><a href="https://t.me/KILivewetten_bot" target="_blank" rel="noopener">Telegram-Kanal</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="impressum.html">Impressum</a></li>
+          <li><a href="datenschutz.html">Datenschutz</a></li>
+          <li><a href="agb.html">AGB</a></li>
+          <li><a href="risikohinweis.html">Risikohinweis</a></li>
+          <li><a href="kuendigen.html">Verträge hier kündigen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <ul>
+          <li><a href="mailto:support@sportwetten-radar.net">support@sportwetten-radar.net</a></li>
+          <!-- Platzhalter: Instagram-Account existiert noch nicht, Link bei Erstellung aktualisieren -->
+          <li><a href="https://instagram.com/sportwettenradar" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>© 2026 Sportwetten Radar · Alle Angaben ohne Gewähr</span>
+      <span>18+ · Kein Finanz- oder Wettberater · Keine Gewinngarantie</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var f = document.getElementById("kform");
+  function show(sel, on) { document.querySelector(sel).hidden = !on; }
+  f.addEventListener("change", function () {
+    show(".k-grund", f.art.value === "außerordentlich");
+    show(".k-datum", f.zeitpunkt.value === "datum");
+  });
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var err = document.getElementById("kerror");
+    var d = {
+      art: f.art.value, grund: f.grund.value.trim(), zeitpunkt: f.zeitpunkt.value,
+      datum: f.datum.value, name: f.name.value.trim(), email: f.email.value.trim(),
+      nick: f.nick.value.trim(), paket: f.paket.value
+    };
+    var fehlt = [];
+    if (!d.name) fehlt.push("Name");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) fehlt.push("gültige E-Mail-Adresse");
+    if (d.art === "außerordentlich" && !d.grund) fehlt.push("Grund");
+    if (d.zeitpunkt === "datum" && !d.datum) fehlt.push("Datum");
+    if (fehlt.length) { err.textContent = "Bitte ergänzen: " + fehlt.join(", ") + "."; err.hidden = false; return; }
+    err.hidden = true;
+    var jetzt = new Date();
+    var stempel = jetzt.toLocaleDateString("de-DE") + ", " + jetzt.toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"}) + " Uhr";
+    var text = "Kündigung Sportwetten Radar\n\n" +
+      "Art: " + (d.art === "ordentlich" ? "Ordentliche Kündigung" : "Außerordentliche Kündigung") + "\n" +
+      (d.grund ? "Grund: " + d.grund + "\n" : "") +
+      "Zeitpunkt: " + (d.zeitpunkt === "datum" ? d.datum : "nächstmöglicher Zeitpunkt") + "\n" +
+      "Name: " + d.name + "\nE-Mail: " + d.email + "\n" +
+      (d.nick ? "Telegram: " + d.nick + "\n" : "") + (d.paket ? "Paket: " + d.paket + "\n" : "") +
+      "Abgegeben am: " + stempel;
+    function fertig(msg) {
+      f.hidden = true;
+      document.getElementById("kdone-text").textContent = msg;
+      document.getElementById("ksummary").textContent = text;
+      show("#kdone", true);
+      window.scrollTo(0, document.getElementById("kdone").offsetTop - 90);
+    }
+    var ep = f.getAttribute("data-endpoint");
+    if (ep) {
+      fetch(ep, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(d)})
+        .then(function (r) { if (!r.ok) throw 0;
+          fertig("Deine Kündigung ist am " + stempel + " bei uns eingegangen. Eine Bestätigung erhältst du zusätzlich per E-Mail."); })
+        .catch(function () { err.textContent = "Das Senden hat nicht geklappt. Bitte kündige per E-Mail an support@sportwetten-radar.net."; err.hidden = false; });
+    } else {
+      window.location.href = "mailto:support@sportwetten-radar.net?subject=" +
+        encodeURIComponent("Kündigung " + d.name) + "&body=" + encodeURIComponent(text);
+      fertig("Dein E-Mail-Programm hat sich mit deiner Kündigung geöffnet. Bitte sende die E-Mail ab – die Kündigung wird mit Eingang bei uns wirksam. Wir bestätigen sie dir per E-Mail.");
+    }
+  });
+})();
+</script>
+</body>
+</html>
