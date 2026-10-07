@@ -72,7 +72,7 @@
             '<div class="tr-kpi">' +
               '<span class="tr-kpi-label">Rendite</span>' +
               '<span class="tr-kpi-value ' + tone(L.rendite) + '">' + signed(L.rendite, 1) + '<small>%</small></span>' +
-              '<span class="tr-kpi-sub">bei gleichbleibendem Einsatz</span>' +
+              '<span class="tr-kpi-sub">im Monat</span>' +
             '</div>' +
           '</div>' +
           '<dl class="tr-rows">' +
@@ -92,7 +92,6 @@
               bar(ep) +
             '</div>' +
           '</div>' +
-          '<p class="tr-panel-note">Keine Rendite-Angabe: Du stellst deinen Wettschein selbst zusammen, daher gibt es keine einheitliche Quote, auf die sich eine Rendite seriös rechnen ließe.</p>' +
         '</article>' +
       '</div>';
 
