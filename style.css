@@ -818,3 +818,133 @@ footer {
 }
 .prices-foot p { margin: 0; color: var(--text-faint); font-size: 13.5px; max-width: 62ch; }
 .prices-foot p a { color: var(--text-muted); }
+
+/* ============================================================
+   Saisonkalender
+   ============================================================ */
+.s-section { border-top: 1px solid var(--line); }
+.s-chart {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  padding: 24px 26px 20px;
+}
+.s-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+.s-title { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.06em; color: var(--text-muted); }
+.s-hint { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); }
+.s-plot {
+  height: 220px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+  align-items: end;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px);
+  background-size: 100% 55px;
+}
+.s-bar {
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+}
+.s-bar span {
+  display: block;
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  transition: filter 0.15s ease, outline-color 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.s-bar.s-h span { background: var(--accent); }
+.s-bar.s-m span { background: #1f9e74; }
+.s-bar.s-n span { background: #2a4a5e; }
+.s-bar:hover span { filter: brightness(1.15); }
+.s-bar.is-active span { outline-color: var(--text-muted); }
+.s-axis {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--text-faint);
+}
+.s-axis div {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+}
+.s-lsp { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--blue); display: inline-block; }
+.s-detail {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  min-height: 74px;
+}
+.s-d-name { font-family: var(--font-display); font-weight: 800; font-size: 19px; }
+.s-d-tier { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; }
+.s-d-tier.s-h { color: var(--accent); }
+.s-d-tier.s-m { color: #5fd1a8; }
+.s-d-tier.s-n { color: var(--text-faint); }
+.s-d-count { font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); }
+.s-detail p { flex-basis: 100%; margin: 4px 0 0; font-size: 14.5px; color: var(--text-muted); }
+.s-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 18px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.s-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.s-sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.s-sw.s-h { background: var(--accent); }
+.s-sw.s-m { background: #1f9e74; }
+.s-sw.s-n { background: #2a4a5e; }
+.s-tip {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 14.5px;
+  color: var(--text-muted);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blue);
+  border-radius: 4px;
+  padding: 14px 18px;
+  background: var(--surface);
+  max-width: 82ch;
+}
+.s-tip strong { color: var(--text); font-weight: 600; }
+.s-tip-icon {
+  flex-shrink: 0;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--blue);
+  color: var(--blue);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.s-foot { margin-top: 14px; font-size: 13px; color: var(--text-faint); max-width: 82ch; }
+@media (max-width: 600px) {
+  .s-chart { padding: 20px 14px 16px; }
+  .s-plot, .s-axis { gap: 4px; }
+  .s-plot { height: 180px; }
+  .s-axis div { font-size: 10.5px; }
+}
