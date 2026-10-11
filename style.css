@@ -998,3 +998,8 @@ footer {
 .k-done button { border: 0; cursor: pointer; margin-top: 8px; }
 .k-summary { white-space: pre-wrap; font-family: var(--font-mono); font-size: 13px; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 14px; margin-top: 12px; }
 @media print { .nav, footer, .back-link, .k-done button { display: none; } }
+
+/* Handy: Wortmarke zweizeilig, damit sie den Kanal-Knopf nicht berührt */
+@media (max-width: 760px) {
+  .nav-logo .wordmark { display: flex; flex-direction: column; font-size: 19px; line-height: 0.95; }
+}
