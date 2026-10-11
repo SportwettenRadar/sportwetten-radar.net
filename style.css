@@ -753,6 +753,8 @@ footer {
   transition: background 0.15s ease, width 0.15s ease;
 }
 .tr-dot[aria-selected="true"] { background: var(--accent); width: 22px; border-radius: 4px; }
+.tr-star { color: var(--text-faint); font-size: 0.55em; margin-left: 2px; vertical-align: super; }
+.tr-foot { margin: 0; padding: 10px 24px 14px; font-size: 12px; color: var(--text-faint); text-align: right; }
 .tr-note {
   margin-top: 16px;
   font-size: 13.5px;

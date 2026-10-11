@@ -61,7 +61,7 @@
     body.innerHTML =
       '<div class="tr-grid">' +
         '<article class="tr-panel">' +
-          '<div class="tr-panel-head"><span class="tr-kicker">Kernangebot</span><h3>Live-Wetten</h3></div>' +
+          '<div class="tr-panel-head"><span class="tr-kicker">Kernangebot</span><h3>Live-Wetten' + (m.rueckrechnung ? '<sup class="tr-star">*</sup>' : '') + '</h3></div>' +
           '<div class="tr-kpis">' +
             '<div class="tr-kpi">' +
               '<span class="tr-kpi-label">Trefferquote</span>' +
@@ -93,7 +93,8 @@
             '</div>' +
           '</div>' +
         '</article>' +
-      '</div>';
+      '</div>' +
+      (m.rueckrechnung ? '<p class="tr-foot">* Rückrechnung mit den aktuellen Einstellungen</p>' : '');
 
     prevBtn.disabled = idx === 0;
     nextBtn.disabled = idx === data.length - 1;

@@ -28,6 +28,9 @@
         Treffer / Anzahl aus. Weicht das Ergebnis vom Bericht ab, ist
         beim Abtippen ein Fehler passiert.
       - Jeder Monatsblock endet mit "}," (Komma nicht vergessen).
+      - Optional: Die Zeile "rueckrechnung: true," blendet unter dem Monat
+        dezent "* Rückrechnung mit den aktuellen Einstellungen" ein. Nur fuer
+        nachtraeglich neu gerechnete Monate verwenden (z. B. September 2026).
 
    4. Datei speichern und bei GitHub hochladen
       (Repository -> "Add file" -> "Upload files" -> diese Datei ablegen
@@ -58,14 +61,15 @@ window.TRACKRECORD = [
 
   {
     monat: "2026-09",
+    rueckrechnung: true,
     live: {
-      wetten: 177,
-      treffer: 126,
-      rendite: 13.8,
-      verlustserie: 4,
-      rueckgang: -4.9,
-      besterTag: 5.3,
-      schlechtesterTag: -2.2
+      wetten: 104,
+      treffer: 73,
+      rendite: 12.2,
+      verlustserie: 3,
+      rueckgang: -5.0,
+      besterTag: 4.1,
+      schlechtesterTag: -2.7
     },
     einzelspiele: {
       tipps: 49,
