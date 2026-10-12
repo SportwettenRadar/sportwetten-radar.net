@@ -316,15 +316,38 @@ h1, h2, h3 {
 @media (prefers-reduced-motion: reduce) {
   .ping-sweep { animation: none; opacity: 0.25; }
 }
-.ping-label {
-  position: absolute;
-  bottom: 6px;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-faint);
+/* kleines Logo im Einstieg: auf dem Handy mit Radar-Drehung, großes Radar entfällt */
+.brand-radar { position: relative; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.brand-radar img { position: relative; z-index: 1; }
+.brand-sweep { display: none; }
+@media (max-width: 860px) {
+  .ping-stage { display: none; }
+  .brand-radar::before {
+    content: ""; position: absolute; inset: -9px; border-radius: 50%;
+    border: 1px solid var(--accent); opacity: 0.25;
+  }
+  .brand-sweep {
+    display: block; position: absolute; inset: -9px; border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(46, 230, 166, 0.55) 18deg, transparent 46deg);
+    animation: sweep-rotate 3.6s linear infinite;
+  }
+  .hero-brand { gap: 20px; margin-left: 9px; }
 }
+@media (prefers-reduced-motion: reduce) { .brand-sweep { animation: none; opacity: 0.25; } }
+
+/* Transparenz-Box im Trackrecord */
+.highlight-box.tr-method { margin-top: 16px; padding: 24px 28px; }
+.highlight-box.tr-method h3 { margin-top: 0; }
+.method { margin-top: 14px; }
+.method summary {
+  cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; color: var(--accent);
+}
+.method summary::-webkit-details-marker { display: none; }
+.method summary::after { content: "▾"; transition: transform .2s; }
+.method[open] summary::after { transform: rotate(180deg); }
+.method .fineprint { margin-top: 14px; }
+@media (max-width: 600px) { .highlight-box.tr-method { padding: 20px 18px; } }
 
 /* ============================================================
    Sections
