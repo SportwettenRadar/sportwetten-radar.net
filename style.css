@@ -1072,10 +1072,8 @@ a[href^="tel:"] { white-space: nowrap; }
 
 /* Rechtstexte im Blocksatz (AGB, Datenschutz, Risikohinweis) */
 .legal-justify p, .legal-justify li {
+  text-align: justify;
   hyphens: auto; -webkit-hyphens: auto;
   hyphenate-limit-chars: 7 3 3;
   overflow-wrap: break-word;
-}
-@media (min-width: 700px) {
-  .legal-justify p, .legal-justify li { text-align: justify; }
 }
