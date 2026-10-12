@@ -1066,3 +1066,6 @@ a[href^="tel:"] { white-space: nowrap; }
   .about .split { gap: 28px; }
   section.about { padding: 12px 0 12px; }
 }
+
+.br-desk { display: none; }
+@media (min-width: 1000px) { .br-desk { display: inline; } }
