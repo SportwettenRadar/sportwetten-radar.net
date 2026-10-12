@@ -43,7 +43,6 @@ window.SAISON = [
     det.innerHTML =
       '<span class="s-d-name">' + m.n + '</span>' +
       '<span class="s-d-tier s-' + t + '">' + TIER[t] + '</span>' +
-      '<span class="s-d-count">Ø ' + m.spiele + ' Spiele</span>' +
       '<p>' + m.note + '</p>';
     var bars = plot.children;
     for (var j = 0; j < bars.length; j++) bars[j].classList.toggle("is-active", j === i);
@@ -55,7 +54,7 @@ window.SAISON = [
     var b = document.createElement("button");
     b.type = "button";
     b.className = "s-bar s-" + t;
-    b.setAttribute("aria-label", m.n + ": " + TIER[t] + ", durchschnittlich " + m.spiele + " Spiele");
+    b.setAttribute("aria-label", m.n + ": " + TIER[t]);
     b.innerHTML = '<span style="height:' + h.toFixed(1) + '%"></span>';
     b.addEventListener("mouseenter", function () { show(i); });
     b.addEventListener("focus", function () { show(i); });
