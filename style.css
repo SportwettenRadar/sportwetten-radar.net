@@ -1069,3 +1069,13 @@ a[href^="tel:"] { white-space: nowrap; }
 
 .br-desk { display: none; }
 @media (min-width: 1000px) { .br-desk { display: inline; } }
+
+/* Rechtstexte im Blocksatz (AGB, Datenschutz, Risikohinweis) */
+.legal-justify p, .legal-justify li {
+  hyphens: auto; -webkit-hyphens: auto;
+  hyphenate-limit-chars: 7 3 3;
+  overflow-wrap: break-word;
+}
+@media (min-width: 700px) {
+  .legal-justify p, .legal-justify li { text-align: justify; }
+}
