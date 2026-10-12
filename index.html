@@ -71,7 +71,7 @@
       <h2>Zwei Angebote. Ein Prinzip.</h2>
       <p>Jede Meldung ist eine statistische Einschätzung, keine Garantie. Die Methodik hinter den Modellen ist Teil des Produkts und bleibt unser Betriebsgeheimnis — was du bekommst, ist das Ergebnis, nachvollziehbar aufbereitet.</p>
     </div>
-    <div class="cards">
+    <div class="cards cards-2">
       <div class="card">
         <div class="mark"></div>
         <span class="card-tag">Kernangebot</span>
@@ -83,12 +83,6 @@
         <span class="card-tag">Täglich</span>
         <h3>Einzelspiele zum Kombinieren</h3>
         <p>Bis zu 5 ausgewählte Einzelspiele pro Tag. Ob du sie einzeln spielst oder selbst kombinierst, entscheidest du.</p>
-      </div>
-      <div class="card">
-        <div class="mark"></div>
-        <span class="card-tag">Am 1. jedes Monats</span>
-        <h3>Monatsbericht</h3>
-        <p>Trefferquote, Rendite, längste Verlustserie, größter Rückgang, bester und schlechtester Tag — ungefiltert im Kanal und hier auf der Seite archiviert.</p>
       </div>
     </div>
 
@@ -117,7 +111,15 @@
     <div class="section-head">
       <span class="eyebrow">Trackrecord</span>
       <h2>Jeder Monat. Ungefiltert.</h2>
-      <p>Die Zahlen stammen aus unserem Monatsbericht im Telegram-Kanal. Jeder bisherige Monat bleibt hier dauerhaft einsehbar — auch die schwachen Monate.</p>
+      <p>Am 1. jedes Monats veröffentlichen wir den Monatsbericht im Telegram-Kanal. Jeder Monat bleibt hier dauerhaft einsehbar — auch die schwachen.</p>
+    </div>
+
+    <div class="mb-strip">
+      <span class="card-tag">Am 1. jedes Monats</span>
+      <ul class="mb-metrics">
+        <li>Trefferquote</li><li>Rendite</li><li>Längste Verlustserie</li>
+        <li>Größter Rückgang</li><li>Bester Tag</li><li>Schlechtester Tag</li>
+      </ul>
     </div>
 
     <div class="tr" data-tr>
@@ -137,38 +139,6 @@
       <div class="tr-dots" data-tr-dots role="tablist" aria-label="Monat auswählen"></div>
     </div>
 
-  </div>
-</section>
-
-<section id="saison" class="s-section">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Saisonkalender</span>
-      <h2>Wann sich das Abo lohnt.</h2>
-      <p>Fußball hat Saison. In manchen Monaten laufen fast alle Ligen gleichzeitig, in anderen kaum welche. Weniger Spiele heißt weniger Live-Wetten — wir verschicken nur, was die Datenlage hergibt. Damit du nicht ausgerechnet zur ruhigsten Zeit buchst, hier das Jahr auf einen Blick.</p>
-    </div>
-
-    <div class="s-chart" data-saison>
-      <div class="s-head">
-        <span class="s-title">Spiele pro Monat in unseren Ligen</span>
-        <span class="s-hint">Monat antippen für Details</span>
-      </div>
-      <div class="s-plot" data-s-plot></div>
-      <div class="s-axis" data-s-axis></div>
-      <div class="s-detail" data-s-detail aria-live="polite"></div>
-      <div class="s-legend">
-        <span><i class="s-sw s-h"></i>Hochsaison</span>
-        <span><i class="s-sw s-m"></i>Normal</span>
-        <span><i class="s-sw s-n"></i>Ruhig</span>
-        <span><i class="s-lsp"></i>Länderspielpause im Monat</span>
-      </div>
-    </div>
-
-    <div class="s-tip">
-      <span class="s-tip-icon" aria-hidden="true">i</span>
-      <span><strong>Nur einen Monat geplant?</strong> Am meisten los ist von Februar bis Mai und von September bis November. Im Juni und Juli pausiert Europa — dann gibt es nur vereinzelt Live-Wetten.</span>
-    </div>
-    <p class="s-foot">Grundlage: Ø Spiele pro Monat in den Ligen, aus denen wir Live-Wetten senden (Saisons 2024/25 und 2025/26). Unsere Live-Wetten folgen diesem Verlauf, sind aber deutlich weniger.<br>Länderspielpausen 2026/27: 21.9.–6.10. · 9.–17.11. · 22.–30.3. · 7.–15.6.</p>
   </div>
 </section>
 
@@ -217,6 +187,38 @@
   </div>
 </section>
 
+<section id="saison" class="s-section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Saisonkalender</span>
+      <h2>Wann sich das Abo lohnt.</h2>
+      <p>Fußball hat Saison. In manchen Monaten laufen fast alle Ligen gleichzeitig, in anderen kaum welche. Weniger Spiele heißt weniger Live-Wetten — wir verschicken nur, was die Datenlage hergibt. Damit du nicht ausgerechnet zur ruhigsten Zeit buchst, hier das Jahr auf einen Blick.</p>
+    </div>
+
+    <div class="s-chart" data-saison>
+      <div class="s-head">
+        <span class="s-title">Spiele pro Monat in unseren Ligen</span>
+        <span class="s-hint">Monat antippen für Details</span>
+      </div>
+      <div class="s-plot" data-s-plot></div>
+      <div class="s-axis" data-s-axis></div>
+      <div class="s-detail" data-s-detail aria-live="polite"></div>
+      <div class="s-legend">
+        <span><i class="s-sw s-h"></i>Hochsaison</span>
+        <span><i class="s-sw s-m"></i>Normal</span>
+        <span><i class="s-sw s-n"></i>Ruhig</span>
+        <span><i class="s-lsp"></i>Länderspielpause im Monat</span>
+      </div>
+    </div>
+
+    <div class="s-tip">
+      <span class="s-tip-icon" aria-hidden="true">i</span>
+      <span><strong>Nur einen Monat geplant?</strong> Am meisten los ist von Februar bis Mai und von September bis November. Im Juni und Juli pausiert Europa — dann gibt es nur vereinzelt Live-Wetten.</span>
+    </div>
+    <p class="s-foot">Grundlage: Ø Spiele pro Monat in den Ligen, aus denen wir Live-Wetten senden (Saisons 2024/25 und 2025/26). Unsere Live-Wetten folgen diesem Verlauf, sind aber deutlich weniger.<br>Länderspielpausen 2026/27: 21.9.–6.10. · 9.–17.11. · 22.–30.3. · 7.–15.6.</p>
+  </div>
+</section>
+
 <section>
   <div class="wrap split">
     <div>
@@ -261,8 +263,8 @@
           <li><a href="#produkt">Live-Wetten</a></li>
           <li><a href="#produkt">Einzelspiele</a></li>
           <li><a href="#trackrecord">Trackrecord</a></li>
-          <li><a href="#saison">Saisonkalender</a></li>
           <li><a href="#preise">Preise</a></li>
+          <li><a href="#saison">Saisonkalender</a></li>
         </ul>
       </div>
       <div>
