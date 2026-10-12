@@ -40,12 +40,13 @@
   Formular aus und klicke auf „Jetzt kündigen“. Felder mit * sind Pflichtfelder.</p>
 
   <!--
-    TECHNIK (unsichtbar): data-endpoint ist noch leer. Bis das Backend auf PythonAnywhere steht,
-    öffnet "Jetzt kündigen" eine vorausgefüllte E-Mail an support@sportwetten-radar.net
-    (Übergangslösung). Sobald die Route existiert, hier die URL eintragen, dann wird per POST
-    gesendet und die Kündigung automatisch über Stripe ausgeführt.
+    TECHNIK (unsichtbar): Backend auf PythonAnywhere läuft seit 12.10.2026. "Jetzt kündigen" sendet
+    die Formulardaten per POST an data-endpoint; die Kündigung wird dort protokolliert und über
+    Stripe ausgeführt, die Bestätigung geht per E-Mail raus. Schlägt das Senden fehl, erscheint
+    ein Hinweis auf support@sportwetten-radar.net. Bei leerem data-endpoint öffnet sich stattdessen
+    eine vorausgefüllte E-Mail (Notfall-Rückfall).
   -->
-  <form class="k-form" id="kform" data-endpoint="" novalidate>
+  <form class="k-form" id="kform" data-endpoint="https://brod112.pythonanywhere.com/kuendigen" novalidate>
     <fieldset>
       <legend>Art der Kündigung *</legend>
       <label class="k-radio"><input type="radio" name="art" value="ordentlich" checked> Ordentliche Kündigung</label>
