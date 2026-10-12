@@ -82,6 +82,10 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 8px;
 }
+.eyebrow .eb-sep {
+  width: 6px; height: 6px; border-radius: 50%; margin: 0 6px;
+  background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+}
 .eyebrow::before {
   content: "";
   width: 6px;
@@ -357,7 +361,7 @@ section { padding: 44px 0; }
   .hero { padding-bottom: 32px; }
   #produkt { padding-top: 36px; }
 }
-.section-head { max-width: 60ch; margin-bottom: 32px; }
+.section-head { max-width: 820px; margin-bottom: 32px; }
 .section-head h2 { font-size: clamp(30px, 4vw, 42px); margin-top: 14px; }
 .section-head p { color: var(--text-muted); font-size: 16.5px; margin-top: 14px; }
 
@@ -449,7 +453,7 @@ section { padding: 44px 0; }
 .risk-box .eyebrow { color: var(--warn); }
 .risk-box .eyebrow::before { background: var(--warn); box-shadow: 0 0 0 3px var(--warn-soft); }
 .risk-box h2 { font-size: 28px; margin-top: 12px; }
-.risk-box p { color: var(--text-muted); margin-top: 14px; font-size: 15.5px; max-width: 62ch; }
+.risk-box p { color: var(--text-muted); margin-top: 14px; font-size: 15.5px; max-width: 90ch; }
 
 .highlight-box {
   background: var(--accent-soft);
@@ -466,7 +470,7 @@ section { padding: 44px 0; }
   letter-spacing: 0;
   margin-top: 10px;
 }
-.highlight-box p { color: var(--text-muted); margin-top: 14px; font-size: 15.5px; max-width: 68ch; }
+.highlight-box p { color: var(--text-muted); margin-top: 14px; font-size: 15.5px; max-width: 100ch; }
 .risk-box .hotline {
   margin-top: 20px;
   font-family: var(--font-mono);
@@ -612,7 +616,7 @@ footer {
   padding: 0;
   display: grid;
   gap: 12px;
-  max-width: 72ch;
+  max-width: 100ch;
 }
 .highlight-box .fineprint li {
   position: relative;
@@ -868,7 +872,8 @@ footer {
   margin-top: 28px;
   flex-wrap: wrap;
 }
-.prices-foot p { margin: 0; color: var(--text-faint); font-size: 13.5px; max-width: 62ch; }
+.prices-foot p { margin: 0; color: var(--text-faint); font-size: 13.5px; }
+.prices-foot p:not(.launch-note) { flex-basis: 100%; }
 .prices-foot p a { color: var(--text-muted); }
 
 /* ============================================================
@@ -979,7 +984,6 @@ footer {
   border-radius: 4px;
   padding: 14px 18px;
   background: var(--surface);
-  max-width: 82ch;
 }
 .s-tip strong { color: var(--text); font-weight: 600; }
 .s-tip-icon {
@@ -993,7 +997,7 @@ footer {
   display: flex; align-items: center; justify-content: center;
   margin-top: 1px;
 }
-.s-foot { margin-top: 14px; font-size: 13px; color: var(--text-faint); max-width: 82ch; }
+.s-foot { margin-top: 14px; font-size: 13px; color: var(--text-faint); }
 @media (max-width: 600px) {
   .s-chart { padding: 20px 14px 16px; }
   .s-plot, .s-axis { gap: 4px; }
@@ -1057,3 +1061,8 @@ footer {
 #preise { border-top: 1px solid var(--line); }
 .tr-month-name { white-space: nowrap; }
 a[href^="tel:"] { white-space: nowrap; }
+
+@media (max-width: 860px) {
+  .about .split { gap: 28px; }
+  section.about { padding: 12px 0 12px; }
+}
