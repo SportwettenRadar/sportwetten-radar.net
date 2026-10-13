@@ -1091,3 +1091,7 @@ a[href^="tel:"] { white-space: nowrap; }
 .promo p { margin: 14px 0 0; font-size: 14px; color: var(--text-muted); }
 .promo p a { color: var(--text); }
 .k-hint { display: block; margin-top: 6px; font-size: 13px; color: var(--text-faint); }
+
+.cta-hint { margin: 12px 0 0; font-size: 13px; color: var(--text-faint); }
+.hero-actions { flex-wrap: wrap; }
+.pre-start[hidden] { display: none; }
