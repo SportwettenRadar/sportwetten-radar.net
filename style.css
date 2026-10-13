@@ -1094,4 +1094,4 @@ a[href^="tel:"] { white-space: nowrap; }
 
 .cta-hint { margin: 12px 0 0; font-size: 13px; color: var(--text-faint); }
 .hero-actions { flex-wrap: wrap; }
-.pre-start[hidden] { display: none; }
+.pre-start[hidden], .promo[hidden] { display: none; }
