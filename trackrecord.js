@@ -42,6 +42,10 @@
   function pct(hit, total) {
     return total > 0 ? (hit / total) * 100 : 0;
   }
+  /* Ampel für Rendite und Gewinn: grün ab +3 %, gelb zwischen -3 % und +3 %, rot ab -3 % */
+  function ampel(rendite) {
+    return rendite >= 3 ? "is-pos" : rendite > -3 ? "is-mid" : "is-neg";
+  }
   function tone(n) {
     return n > 0 ? "is-pos" : n < 0 ? "is-neg" : "";
   }
@@ -58,11 +62,13 @@
 
     nameEl.textContent = monthName(m.monat);
 
+    /* Gewinn in Einsätzen: aus dem Feld gewinn, sonst Rendite × Anzahl Live-Wetten (Einheitseinsatz) */
+    var G = (typeof L.gewinn === "number") ? L.gewinn : Math.round(L.rendite * L.wetten) / 100;
     body.innerHTML =
       '<div class="tr-grid">' +
         '<article class="tr-panel">' +
           '<div class="tr-panel-head"><span class="tr-kicker">Kernangebot</span><h3>Live-Wetten' + (m.rueckrechnung ? '<sup class="tr-star">*</sup>' : '') + '</h3></div>' +
-          '<div class="tr-kpis">' +
+          '<div class="tr-kpis tr-kpis--3">' +
             '<div class="tr-kpi">' +
               '<span class="tr-kpi-label">Trefferquote</span>' +
               '<span class="tr-kpi-value">' + de(lp, 1) + '<small>%</small></span>' +
@@ -71,7 +77,12 @@
             '</div>' +
             '<div class="tr-kpi">' +
               '<span class="tr-kpi-label">Rendite</span>' +
-              '<span class="tr-kpi-value ' + tone(L.rendite) + '">' + signed(L.rendite, 1) + '<small>%</small></span>' +
+              '<span class="tr-kpi-value ' + ampel(L.rendite) + '">' + signed(L.rendite, 1) + '<small>%</small></span>' +
+              '<span class="tr-kpi-sub">im Monat</span>' +
+            '</div>' +
+            '<div class="tr-kpi">' +
+              '<span class="tr-kpi-label">Gewinn</span>' +
+              '<span class="tr-kpi-value ' + ampel(L.rendite) + '">' + signed(G, 1) + '<small>Einsätze</small></span>' +
               '<span class="tr-kpi-sub">im Monat</span>' +
             '</div>' +
           '</div>' +

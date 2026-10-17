@@ -14,6 +14,8 @@
         Live-Wetten: 177                       ->  wetten: 177
         Treffer: 126 (71,2 %)                  ->  treffer: 126
         Rendite: +13,8 %                       ->  rendite: 13.8
+        (Gewinn in Einsätzen rechnet die Seite selbst: Rendite × Live-Wetten.
+         Steht er im Bericht genauer, optional: gewinn: 24.4)
         Längste Verlustserie: 4 in Folge       ->  verlustserie: 4
         Größter Rückgang: -4,9 Einsätze        ->  rueckgang: -4.9
         Bester Tag: +5,3 Einsätze              ->  besterTag: 5.3
