@@ -106,4 +106,4 @@ window.TRACKRECORD_WOCHEN = [
 ];
 
 /* Hinweis, wenn für einen Monat keine Wochenwerte angezeigt werden können. */
-window.TRACKRECORD_WOCHEN_HINWEIS = "Wochenwerte veröffentlichen wir ab dem 12. Oktober 2026. Für frühere Monate zeigen wir den Monatsbericht.";
+window.TRACKRECORD_WOCHEN_HINWEIS = "Wochenwerte veröffentlichen wir ab dem 5. Oktober 2026. Frühere Werte stammen aus anderen Bot-Einstellungen und sind nicht vergleichbar. Für frühere Monate zeigen wir den Monatsbericht.";
