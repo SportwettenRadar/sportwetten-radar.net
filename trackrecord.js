@@ -30,10 +30,18 @@
   var allWeeks = (window.TRACKRECORD_WOCHEN || [])
     .filter(function (w) { return w && /^\d{4}-\d{2}$/.test(w.monat) && /^\d{4}-\d{2}-\d{2}$/.test(w.von) && /^\d{4}-\d{2}-\d{2}$/.test(w.bis); })
     .sort(function (a, b) { return a.von < b.von ? -1 : 1; });
+  // Monate, für die schon Wochen, aber noch kein Monatsbericht vorliegt (laufender Monat), kommen dazu.
+  var haveKeys = {};
+  data.forEach(function (m) { haveKeys[m.monat] = true; });
+  allWeeks.forEach(function (w) {
+    if (!haveKeys[w.monat]) { haveKeys[w.monat] = true; data.push({ monat: w.monat, keinBericht: true }); }
+  });
+  data.sort(function (a, b) { return a.monat < b.monat ? -1 : 1; });
   var modeBtns = root.querySelectorAll("[data-tr-mode]");
   var labelEl = root.querySelector("[data-tr-label]");
   var mode = "monat";
-  var monthIdx = data.length - 1; // neuester Monat
+  var monthIdx = data.length - 1;
+  for (var q = data.length - 1; q >= 0; q--) { if (!data[q].keinBericht) { monthIdx = q; break; } } // neuester Monat mit Bericht
   var weeks = [];
   var idx = monthIdx;
   var set = data;
@@ -79,6 +87,16 @@
   function render() {
     var m = set[idx];
     var isW = mode === "woche";
+    if (m.keinBericht && !isW) {
+      nameEl.textContent = monthName(m.monat);
+      if (labelEl) labelEl.textContent = "Monatsbericht";
+      body.innerHTML = '<p class="tr-empty">Der Monatsbericht für ' + monthName(m.monat) + ' erscheint am 1. des Folgemonats. Die Wochenwerte findest du schon unter „Woche“.</p>';
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === set.length - 1;
+      var dd = dotsEl.children;
+      for (var j = 0; j < dd.length; j++) { dd[j].setAttribute("aria-selected", j === idx ? "true" : "false"); dd[j].tabIndex = j === idx ? 0 : -1; }
+      return;
+    }
     var per = isW ? "in der Woche" : "im Monat";
     var L = m.live || {};
     var E = m.einzelspiele || {};
@@ -178,7 +196,7 @@
         set = []; idx = 0;
         nameEl.textContent = monthName(key);
         if (labelEl) labelEl.textContent = "Wochenbericht";
-        body.innerHTML = '<p class="tr-empty">Für diesen Monat liegen noch keine Wochenwerte vor.</p>';
+        body.innerHTML = '<p class="tr-empty">' + (window.TRACKRECORD_WOCHEN_HINWEIS || "Für diesen Monat liegen noch keine Wochenwerte vor.") + '</p>';
         prevBtn.disabled = nextBtn.disabled = true;
         dotsEl.innerHTML = "";
         return;
