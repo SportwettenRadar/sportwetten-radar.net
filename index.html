@@ -110,10 +110,14 @@
     </div>
 
     <div class="tr" data-tr>
+      <div class="tr-modes" role="group" aria-label="Zeitraum">
+        <button type="button" class="tr-mode" data-tr-mode="monat" aria-pressed="true">Monat</button>
+        <button type="button" class="tr-mode" data-tr-mode="woche" aria-pressed="false">Woche</button>
+      </div>
       <div class="tr-head">
         <button class="tr-nav" type="button" data-tr-prev aria-label="Vorheriger Monat">←</button>
         <div class="tr-month">
-          <span class="tr-month-label">Monatsbericht</span>
+          <span class="tr-month-label" data-tr-label>Monatsbericht</span>
           <span class="tr-month-name" data-tr-name aria-live="polite">—</span>
         </div>
         <button class="tr-nav" type="button" data-tr-next aria-label="Nächster Monat">→</button>

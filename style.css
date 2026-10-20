@@ -686,6 +686,14 @@ footer {
 .tr-nav:disabled { opacity: 0.3; cursor: default; }
 .tr.is-single .tr-nav { visibility: hidden; }
 
+.tr-modes { display: flex; gap: 8px; padding: 14px 20px 0; background: var(--surface-2); }
+.tr.no-weeks .tr-modes { display: none; }
+.tr-mode {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--text-muted); cursor: pointer;
+}
+.tr-mode[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
 .tr-body { padding: 0; }
 .tr-body.is-in { animation: tr-fade 0.35s ease; }
 @keyframes tr-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

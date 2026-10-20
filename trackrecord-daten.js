@@ -80,3 +80,18 @@ window.TRACKRECORD = [
   },
 
 ];
+
+/* Wochen. Jede Woche gehört zu einem Monat ("monat") und ist auf dessen Grenzen zugeschnitten
+   (Mo bis So, am Monatsanfang/-ende eine Teilwoche). So ergeben die Wochen eines Monats zusammen den Monat.
+   Pflichtfelder: monat, von, bis, live.wetten, live.treffer, live.rendite, einzelspiele.tipps, einzelspiele.treffer.
+   Rendite in Prozent bei gleichem Einsatz je Wette; der Gewinn in Einsätzen wird daraus berechnet (oder als live.gewinn eintragen).
+   Verlustserie, rueckgang, besterTag, schlechtesterTag sind optional. */
+window.TRACKRECORD_WOCHEN = [
+  {
+    monat: "2026-10",
+    von: "2026-10-12",
+    bis: "2026-10-18",
+    live: { wetten: 75, treffer: 42, rendite: -11.3 },
+    einzelspiele: { tipps: 34, treffer: 27 }
+  }
+];

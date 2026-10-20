@@ -25,7 +25,21 @@
     return;
   }
 
-  var idx = data.length - 1; // neuester Monat
+  // Wochen gehören zu einem Monat (Feld "monat") und sind auf die Monatsgrenzen zugeschnitten,
+  // damit die Wochen eines Monats zusammen den Monat ergeben. Quelle: window.TRACKRECORD_WOCHEN
+  var allWeeks = (window.TRACKRECORD_WOCHEN || [])
+    .filter(function (w) { return w && /^\d{4}-\d{2}$/.test(w.monat) && /^\d{4}-\d{2}-\d{2}$/.test(w.von) && /^\d{4}-\d{2}-\d{2}$/.test(w.bis); })
+    .sort(function (a, b) { return a.von < b.von ? -1 : 1; });
+  var modeBtns = root.querySelectorAll("[data-tr-mode]");
+  var labelEl = root.querySelector("[data-tr-label]");
+  var mode = "monat";
+  var monthIdx = data.length - 1; // neuester Monat
+  var weeks = [];
+  var idx = monthIdx;
+  var set = data;
+
+  function dm(s) { var p = s.split("-"); return parseInt(p[2], 10) + "." + parseInt(p[1], 10) + "."; }
+  function weekName(w) { return dm(w.von) + " bis " + dm(w.bis); }
 
   function monthName(key) {
     var p = key.split("-");
@@ -53,14 +67,26 @@
     return '<div class="tr-bar" aria-hidden="true"><span style="width:' + Math.max(0, Math.min(100, p)).toFixed(1) + '%"></span></div>';
   }
 
+  function rowsHtml(L) {
+    var r = "";
+    if (L.verlustserie != null) r += '<div><dt>Längste Verlustserie</dt><dd>' + L.verlustserie + ' in Folge</dd></div>';
+    if (L.rueckgang != null) r += '<div><dt>Größter Rückgang</dt><dd class="' + tone(L.rueckgang) + '">' + signed(L.rueckgang, 1) + ' Einsätze</dd></div>';
+    if (L.besterTag != null) r += '<div><dt>Bester Tag</dt><dd class="' + tone(L.besterTag) + '">' + signed(L.besterTag, 1) + ' Einsätze</dd></div>';
+    if (L.schlechtesterTag != null) r += '<div><dt>Schlechtester Tag</dt><dd class="' + tone(L.schlechtesterTag) + '">' + signed(L.schlechtesterTag, 1) + ' Einsätze</dd></div>';
+    return r ? '<dl class="tr-rows">' + r + '</dl>' : '';
+  }
+
   function render() {
-    var m = data[idx];
+    var m = set[idx];
+    var isW = mode === "woche";
+    var per = isW ? "in der Woche" : "im Monat";
     var L = m.live || {};
     var E = m.einzelspiele || {};
     var lp = pct(L.treffer, L.wetten);
     var ep = pct(E.treffer, E.tipps);
 
-    nameEl.textContent = monthName(m.monat);
+    nameEl.textContent = isW ? weekName(m) : monthName(m.monat);
+    if (labelEl) labelEl.textContent = isW ? "Wochenbericht · " + monthName(m.monat) : "Monatsbericht";
 
     /* Gewinn in Einsätzen: aus dem Feld gewinn, sonst Rendite × Anzahl Live-Wetten (Einheitseinsatz) */
     var G = (typeof L.gewinn === "number") ? L.gewinn : Math.round(L.rendite * L.wetten) / 100;
@@ -78,20 +104,15 @@
             '<div class="tr-kpi">' +
               '<span class="tr-kpi-label">Rendite</span>' +
               '<span class="tr-kpi-value ' + ampel(L.rendite) + '">' + signed(L.rendite, 1) + '<small>%</small></span>' +
-              '<span class="tr-kpi-sub">im Monat</span>' +
+              '<span class="tr-kpi-sub">' + per + '</span>' +
             '</div>' +
             '<div class="tr-kpi">' +
               '<span class="tr-kpi-label">Gewinn</span>' +
               '<span class="tr-kpi-value ' + ampel(L.rendite) + '">' + signed(G, 1) + '<small>Einsätze</small></span>' +
-              '<span class="tr-kpi-sub">im Monat</span>' +
+              '<span class="tr-kpi-sub">' + per + '</span>' +
             '</div>' +
           '</div>' +
-          '<dl class="tr-rows">' +
-            '<div><dt>Längste Verlustserie</dt><dd>' + L.verlustserie + ' in Folge</dd></div>' +
-            '<div><dt>Größter Rückgang</dt><dd class="' + tone(L.rueckgang) + '">' + signed(L.rueckgang, 1) + ' Einsätze</dd></div>' +
-            '<div><dt>Bester Tag</dt><dd class="' + tone(L.besterTag) + '">' + signed(L.besterTag, 1) + ' Einsätze</dd></div>' +
-            '<div><dt>Schlechtester Tag</dt><dd class="' + tone(L.schlechtesterTag) + '">' + signed(L.schlechtesterTag, 1) + ' Einsätze</dd></div>' +
-          '</dl>' +
+          rowsHtml(L) +
         '</article>' +
         '<article class="tr-panel">' +
           '<div class="tr-panel-head"><span class="tr-kicker">Bis zu 5 pro Tag</span><h3>Einzelspiele zum Kombinieren</h3></div>' +
@@ -108,7 +129,7 @@
       (m.rueckrechnung ? '<p class="tr-foot">* Rückrechnung mit den aktuellen Einstellungen</p>' : '');
 
     prevBtn.disabled = idx === 0;
-    nextBtn.disabled = idx === data.length - 1;
+    nextBtn.disabled = idx === set.length - 1;
 
     var dots = dotsEl.children;
     for (var i = 0; i < dots.length; i++) {
@@ -118,28 +139,61 @@
   }
 
   function go(i) {
-    if (i < 0 || i >= data.length || i === idx) return;
+    if (i < 0 || i >= set.length || i === idx) return;
     idx = i;
+    if (mode === "monat") monthIdx = i;
     body.classList.remove("is-in");
     void body.offsetWidth; // Animation neu starten
     body.classList.add("is-in");
     render();
   }
 
-  // Punkte nur bei mehr als einem Monat
-  if (data.length > 1) {
-    data.forEach(function (m, i) {
-      var d = document.createElement("button");
-      d.type = "button";
-      d.className = "tr-dot";
-      d.setAttribute("role", "tab");
-      d.setAttribute("aria-label", monthName(m.monat));
-      d.addEventListener("click", function () { go(i); });
-      dotsEl.appendChild(d);
-    });
-  } else {
-    root.classList.add("is-single");
+  function buildDots() {
+    dotsEl.innerHTML = "";
+    if (set.length > 1) {
+      root.classList.remove("is-single");
+      set.forEach(function (m, i) {
+        var d = document.createElement("button");
+        d.type = "button";
+        d.className = "tr-dot";
+        d.setAttribute("role", "tab");
+        d.setAttribute("aria-label", mode === "woche" ? weekName(m) : monthName(m.monat));
+        d.addEventListener("click", function () { go(i); });
+        dotsEl.appendChild(d);
+      });
+    } else {
+      root.classList.add("is-single");
+    }
   }
+
+  function showMode(next) {
+    mode = next;
+    for (var i = 0; i < modeBtns.length; i++)
+      modeBtns[i].setAttribute("aria-pressed", modeBtns[i].getAttribute("data-tr-mode") === mode ? "true" : "false");
+    if (mode === "woche") {
+      var key = data[monthIdx].monat;
+      weeks = allWeeks.filter(function (w) { return w.monat === key; });
+      if (!weeks.length) {
+        set = []; idx = 0;
+        nameEl.textContent = monthName(key);
+        if (labelEl) labelEl.textContent = "Wochenbericht";
+        body.innerHTML = '<p class="tr-empty">Für diesen Monat liegen noch keine Wochenwerte vor.</p>';
+        prevBtn.disabled = nextBtn.disabled = true;
+        dotsEl.innerHTML = "";
+        return;
+      }
+      set = weeks; idx = weeks.length - 1;
+    } else {
+      set = data; idx = monthIdx;
+    }
+    buildDots();
+    render();
+  }
+  for (var k = 0; k < modeBtns.length; k++) {
+    (function (b) { b.addEventListener("click", function () { showMode(b.getAttribute("data-tr-mode")); }); })(modeBtns[k]);
+  }
+  if (!allWeeks.length) root.classList.add("no-weeks");
+  buildDots();
 
   prevBtn.addEventListener("click", function () { go(idx - 1); });
   nextBtn.addEventListener("click", function () { go(idx + 1); });
