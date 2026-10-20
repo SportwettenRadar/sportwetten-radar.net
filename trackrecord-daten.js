@@ -90,6 +90,14 @@ window.TRACKRECORD = [
 window.TRACKRECORD_WOCHEN = [
   {
     monat: "2026-10",
+    von: "2026-10-05",
+    bis: "2026-10-11",
+    rueckrechnung: true,
+    live: { wetten: 42, treffer: 29, rendite: 8.5 },
+    einzelspiele: { tipps: 27, treffer: 22 }
+  },
+  {
+    monat: "2026-10",
     von: "2026-10-12",
     bis: "2026-10-18",
     live: { wetten: 75, treffer: 42, rendite: -11.3 },
