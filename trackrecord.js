@@ -145,6 +145,7 @@
         '</article>' +
       '</div>' +
       (m.rueckrechnung ? '<p class="tr-foot">* Rückrechnung mit den aktuellen Einstellungen</p>' : '') +
+      (isW && idx === 0 && window.TRACKRECORD_WOCHEN_HINWEIS ? '<p class="tr-foot">' + window.TRACKRECORD_WOCHEN_HINWEIS + '</p>' : '') +
       (isW ? '<p class="tr-foot">Wochen laufen von Montag bis Sonntag und zählen zu dem Monat, in dem die meisten ihrer Tage liegen. Die Summe der Wochen kann deshalb vom Monatswert abweichen.</p>' : '');
 
     prevBtn.disabled = idx === 0;
@@ -190,18 +191,17 @@
     for (var i = 0; i < modeBtns.length; i++)
       modeBtns[i].setAttribute("aria-pressed", modeBtns[i].getAttribute("data-tr-mode") === mode ? "true" : "false");
     if (mode === "woche") {
-      var key = data[monthIdx].monat;
-      weeks = allWeeks.filter(function (w) { return w.monat === key; });
-      if (!weeks.length) {
+      // Woche öffnet immer mit der neuesten Woche; "←" führt durch alle Wochen zurück, auch über Monatsgrenzen.
+      if (!allWeeks.length) {
         set = []; idx = 0;
-        nameEl.textContent = monthName(key);
+        nameEl.textContent = monthName(data[monthIdx].monat);
         if (labelEl) labelEl.textContent = "Wochenbericht";
-        body.innerHTML = '<p class="tr-empty">' + (window.TRACKRECORD_WOCHEN_HINWEIS || "Für diesen Monat liegen noch keine Wochenwerte vor.") + '</p>';
+        body.innerHTML = '<p class="tr-empty">' + (window.TRACKRECORD_WOCHEN_HINWEIS || "Es liegen noch keine Wochenwerte vor.") + '</p>';
         prevBtn.disabled = nextBtn.disabled = true;
         dotsEl.innerHTML = "";
         return;
       }
-      set = weeks; idx = weeks.length - 1;
+      set = allWeeks; idx = allWeeks.length - 1;
     } else {
       set = data; idx = monthIdx;
     }
