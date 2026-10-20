@@ -25,8 +25,8 @@
     return;
   }
 
-  // Wochen gehören zu einem Monat (Feld "monat") und sind auf die Monatsgrenzen zugeschnitten,
-  // damit die Wochen eines Monats zusammen den Monat ergeben. Quelle: window.TRACKRECORD_WOCHEN
+  // Wochen (Mo bis So, volle 7 Tage) gehören zu dem Monat, in dem die meisten ihrer Tage liegen (Feld "monat").
+  // Quelle: window.TRACKRECORD_WOCHEN
   var allWeeks = (window.TRACKRECORD_WOCHEN || [])
     .filter(function (w) { return w && /^\d{4}-\d{2}$/.test(w.monat) && /^\d{4}-\d{2}-\d{2}$/.test(w.von) && /^\d{4}-\d{2}-\d{2}$/.test(w.bis); })
     .sort(function (a, b) { return a.von < b.von ? -1 : 1; });
@@ -126,7 +126,8 @@
           '</div>' +
         '</article>' +
       '</div>' +
-      (m.rueckrechnung ? '<p class="tr-foot">* Rückrechnung mit den aktuellen Einstellungen</p>' : '');
+      (m.rueckrechnung ? '<p class="tr-foot">* Rückrechnung mit den aktuellen Einstellungen</p>' : '') +
+      (isW ? '<p class="tr-foot">Wochen laufen von Montag bis Sonntag und zählen zu dem Monat, in dem die meisten ihrer Tage liegen. Die Summe der Wochen kann deshalb vom Monatswert abweichen.</p>' : '');
 
     prevBtn.disabled = idx === 0;
     nextBtn.disabled = idx === set.length - 1;

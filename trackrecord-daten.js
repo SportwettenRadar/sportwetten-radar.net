@@ -81,8 +81,9 @@ window.TRACKRECORD = [
 
 ];
 
-/* Wochen. Jede Woche gehört zu einem Monat ("monat") und ist auf dessen Grenzen zugeschnitten
-   (Mo bis So, am Monatsanfang/-ende eine Teilwoche). So ergeben die Wochen eines Monats zusammen den Monat.
+/* Wochen. Volle Wochen Montag bis Sonntag. Jede Woche gehört zu dem Monat, in dem die meisten ihrer 7 Tage liegen ("monat").
+   Beispiel: 28.9. bis 4.10. gehört zum Oktober (4 von 7 Tage). Die Summe der Wochen kann deshalb vom Monat abweichen.
+   Rückrechnungen mit rueckrechnung: true kennzeichnen.
    Pflichtfelder: monat, von, bis, live.wetten, live.treffer, live.rendite, einzelspiele.tipps, einzelspiele.treffer.
    Rendite in Prozent bei gleichem Einsatz je Wette; der Gewinn in Einsätzen wird daraus berechnet (oder als live.gewinn eintragen).
    Verlustserie, rueckgang, besterTag, schlechtesterTag sind optional. */
