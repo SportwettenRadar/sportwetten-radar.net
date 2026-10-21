@@ -69,15 +69,16 @@ window.TRACKRECORD = [
       treffer: 73,
       rendite: 12.2,
       verlustserie: 3,
-      rueckgang: -5.0,
+      rueckgang: -5,
       besterTag: 4.1,
-      schlechtesterTag: -2.7
+      schlechtesterTag: -2.7,
+      gewinn: 12.7
     },
     einzelspiele: {
       tipps: 49,
       treffer: 39
     }
-  },
+  }
 
 ];
 
@@ -93,15 +94,39 @@ window.TRACKRECORD_WOCHEN = [
     von: "2026-10-05",
     bis: "2026-10-11",
     rueckrechnung: true,
-    live: { wetten: 42, treffer: 29, rendite: 8.5 },
-    einzelspiele: { tipps: 27, treffer: 22 }
+    live: {
+      wetten: 42,
+      treffer: 29,
+      rendite: 8.5,
+      gewinn: 3.6,
+      verlustserie: 3,
+      rueckgang: -3.3,
+      besterTag: 2.8,
+      schlechtesterTag: -1.7
+    },
+    einzelspiele: {
+      tipps: 27,
+      treffer: 22
+    }
   },
   {
     monat: "2026-10",
     von: "2026-10-12",
     bis: "2026-10-18",
-    live: { wetten: 75, treffer: 42, rendite: -11.3 },
-    einzelspiele: { tipps: 34, treffer: 27 }
+    live: {
+      wetten: 75,
+      treffer: 42,
+      rendite: -11.3,
+      gewinn: -8.4,
+      verlustserie: 5,
+      rueckgang: -11.1,
+      besterTag: 3.1,
+      schlechtesterTag: -5.5
+    },
+    einzelspiele: {
+      tipps: 34,
+      treffer: 27
+    }
   }
 ];
 
