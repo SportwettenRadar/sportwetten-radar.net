@@ -128,6 +128,25 @@ window.TRACKRECORD_WOCHEN = [
       tipps: 34,
       treffer: 27
     }
+  },
+  {
+    monat: "2026-10",
+    von: "2026-10-19",
+    bis: "2026-10-25",
+    live: {
+      wetten: 71,
+      treffer: 47,
+      rendite: 3.9,
+      gewinn: 2.7,
+      verlustserie: 4,
+      rueckgang: -5.6,
+      besterTag: 2.8,
+      schlechtesterTag: -1.9
+    },
+    einzelspiele: {
+      tipps: 34,
+      treffer: 27
+    }
   }
 ];
 
