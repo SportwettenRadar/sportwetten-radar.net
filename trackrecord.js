@@ -144,7 +144,7 @@
           '</div>' +
         '</article>' +
       '</div>' +
-      (m.rueckrechnung ? '<p class="tr-foot">* Rückrechnung mit den aktuellen Einstellungen</p>' : '') +
+      (m.rueckrechnung ? '<p class="tr-foot">' + (m.rueckrechnungText || '* Rückrechnung mit den Einstellungen vom 11.10.2026') + '</p>' : '') +
       (isW && idx === 0 && window.TRACKRECORD_WOCHEN_HINWEIS ? '<p class="tr-foot">' + window.TRACKRECORD_WOCHEN_HINWEIS + '</p>' : '') +
       (isW ? '<p class="tr-foot">Wochen laufen von Montag bis Sonntag und zählen zu dem Monat, in dem die meisten ihrer Tage liegen. Die Summe der Wochen kann deshalb vom Monatswert abweichen.</p>' : '');
 

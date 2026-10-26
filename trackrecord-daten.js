@@ -31,7 +31,8 @@
         beim Abtippen ein Fehler passiert.
       - Jeder Monatsblock endet mit "}," (Komma nicht vergessen).
       - Optional: Die Zeile "rueckrechnung: true," blendet unter dem Monat
-        dezent "* Rückrechnung mit den aktuellen Einstellungen" ein. Nur fuer
+        dezent "* Rückrechnung mit den Einstellungen vom 11.10.2026" ein (eigener Text: rueckrechnungText: "...",
+        z. B. fuer Oktober mit den Stichtagen 11.10. und 25.10.). Nur fuer
         nachtraeglich neu gerechnete Monate verwenden (z. B. September 2026).
 
    4. Datei speichern und bei GitHub hochladen
