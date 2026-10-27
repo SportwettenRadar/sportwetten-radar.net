@@ -8,7 +8,7 @@
 
   var inner = document.createElement("div");
   inner.className = "wrap site-menu-grid";
-  Array.prototype.slice.call(grid.children, 1).forEach(function (col) {
+  Array.prototype.slice.call(grid.children).forEach(function (col) {
     inner.appendChild(col.cloneNode(true));
   });
   panel.appendChild(inner);
