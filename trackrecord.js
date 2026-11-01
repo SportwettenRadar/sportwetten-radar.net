@@ -25,29 +25,45 @@
     return;
   }
 
-  // Wochen (Mo bis So, volle 7 Tage) gehören zu dem Monat, in dem die meisten ihrer Tage liegen (Feld "monat").
-  // Quelle: window.TRACKRECORD_WOCHEN
-  var allWeeks = (window.TRACKRECORD_WOCHEN || [])
-    .filter(function (w) { return w && /^\d{4}-\d{2}$/.test(w.monat) && /^\d{4}-\d{2}-\d{2}$/.test(w.von) && /^\d{4}-\d{2}-\d{2}$/.test(w.bis); })
-    .sort(function (a, b) { return a.von < b.von ? -1 : 1; });
-  // Monate, für die schon Wochen, aber noch kein Monatsbericht vorliegt (laufender Monat), kommen dazu.
-  var haveKeys = {};
-  data.forEach(function (m) { haveKeys[m.monat] = true; });
-  allWeeks.forEach(function (w) {
-    if (!haveKeys[w.monat]) { haveKeys[w.monat] = true; data.push({ monat: w.monat, keinBericht: true }); }
-  });
-  data.sort(function (a, b) { return a.monat < b.monat ? -1 : 1; });
+  // Jahre: Summe der Monatsberichte eines Kalenderjahres. Ein neues Jahr erscheint erst mit seinem ersten Monatsbericht.
+  function sumYear(y, list) {
+    var wetten = 0, treffer = 0, gewinn = 0, tipps = 0, etreffer = 0, best = null, worst = null, rr = [];
+    list.forEach(function (m) {
+      var L = m.live || {}, E = m.einzelspiele || {};
+      var g = (typeof L.gewinn === "number") ? L.gewinn : Math.round(L.rendite * L.wetten) / 100;
+      wetten += L.wetten; treffer += L.treffer; gewinn += g;
+      tipps += E.tipps || 0; etreffer += E.treffer || 0;
+      if (typeof L.besterTag === "number") best = best === null ? L.besterTag : Math.max(best, L.besterTag);
+      if (typeof L.schlechtesterTag === "number") worst = worst === null ? L.schlechtesterTag : Math.min(worst, L.schlechtesterTag);
+      if (m.rueckrechnung) rr.push(m.monat);
+    });
+    gewinn = Math.round(gewinn * 10) / 10;
+    var first = list[0].monat;
+    var fm = parseInt(first.split("-")[1], 10);
+    return {
+      jahr: y,
+      name: y + (fm > 1 ? " (seit 1. " + MONATE[fm - 1] + ")" : ""),
+      anzahl: list.length,
+      rueckMonate: rr,
+      live: { wetten: wetten, treffer: treffer, gewinn: gewinn, rendite: wetten ? Math.round(gewinn / wetten * 1000) / 10 : 0,
+              besterTag: best, schlechtesterTag: worst },
+      einzelspiele: { tipps: tipps, treffer: etreffer }
+    };
+  }
+  var years = [];
+  (function () {
+    var byYear = {};
+    data.forEach(function (m) { var y = m.monat.slice(0, 4); (byYear[y] = byYear[y] || []).push(m); });
+    Object.keys(byYear).sort().forEach(function (y) { years.push(sumYear(y, byYear[y])); });
+  })();
   var modeBtns = root.querySelectorAll("[data-tr-mode]");
   var labelEl = root.querySelector("[data-tr-label]");
   var mode = "monat";
-  var monthIdx = data.length - 1;
-  for (var q = data.length - 1; q >= 0; q--) { if (!data[q].keinBericht) { monthIdx = q; break; } } // neuester Monat mit Bericht
-  var weeks = [];
+  var monthIdx = data.length - 1; // neuester Monat mit Bericht
+    var yearIdx = years.length - 1;
   var idx = monthIdx;
   var set = data;
 
-  function dm(s) { var p = s.split("-"); return parseInt(p[2], 10) + "." + parseInt(p[1], 10) + "."; }
-  function weekName(w) { return dm(w.von) + " bis " + dm(w.bis); }
 
   function monthName(key) {
     var p = key.split("-");
@@ -86,32 +102,24 @@
 
   function render() {
     var m = set[idx];
-    var isW = mode === "woche";
-    if (m.keinBericht && !isW) {
-      nameEl.textContent = monthName(m.monat);
-      if (labelEl) labelEl.textContent = "Monatsbericht";
-      body.innerHTML = '<p class="tr-empty">Der Monatsbericht für ' + monthName(m.monat) + ' erscheint am 1. des Folgemonats. Die Wochenwerte findest du schon unter „Woche“.</p>';
-      prevBtn.disabled = idx === 0;
-      nextBtn.disabled = idx === set.length - 1;
-      var dd = dotsEl.children;
-      for (var j = 0; j < dd.length; j++) { dd[j].setAttribute("aria-selected", j === idx ? "true" : "false"); dd[j].tabIndex = j === idx ? 0 : -1; }
-      return;
-    }
-    var per = isW ? "in der Woche" : "im Monat";
+    var isY = mode === "jahr";
+    var per = isY ? "im Jahr" : "im Monat";
     var L = m.live || {};
     var E = m.einzelspiele || {};
     var lp = pct(L.treffer, L.wetten);
     var ep = pct(E.treffer, E.tipps);
 
-    nameEl.textContent = isW ? weekName(m) : monthName(m.monat);
-    if (labelEl) labelEl.textContent = isW ? "Wochenbericht · " + monthName(m.monat) : "Monatsbericht";
+    nameEl.textContent = isY ? m.name : monthName(m.monat);
+    if (labelEl) labelEl.textContent = isY ? "Jahresbericht" : "Monatsbericht";
+    prevBtn.setAttribute("aria-label", isY ? "Vorheriges Jahr" : "Vorheriger Monat");
+    nextBtn.setAttribute("aria-label", isY ? "Nächstes Jahr" : "Nächster Monat");
 
     /* Gewinn in Einsätzen: aus dem Feld gewinn, sonst Rendite × Anzahl Live-Wetten (Einheitseinsatz) */
     var G = (typeof L.gewinn === "number") ? L.gewinn : Math.round(L.rendite * L.wetten) / 100;
     body.innerHTML =
       '<div class="tr-grid">' +
         '<article class="tr-panel">' +
-          '<div class="tr-panel-head"><span class="tr-kicker">Kernangebot</span><h3>Live-Wetten' + (m.rueckrechnung ? '<sup class="tr-star">*</sup>' : '') + '</h3></div>' +
+          '<div class="tr-panel-head"><span class="tr-kicker">Kernangebot</span><h3>Live-Wetten' + ((isY ? m.rueckMonate.length : m.rueckrechnung) ? '<sup class="tr-star">*</sup>' : '') + '</h3></div>' +
           '<div class="tr-kpis tr-kpis--3">' +
             '<div class="tr-kpi">' +
               '<span class="tr-kpi-label">Trefferquote</span>' +
@@ -144,9 +152,9 @@
           '</div>' +
         '</article>' +
       '</div>' +
-      (m.rueckrechnung ? '<p class="tr-foot">' + (m.rueckrechnungText || '* Rückrechnung mit den Einstellungen vom 11.10.2026') + '</p>' : '') +
-      (isW && idx === 0 && window.TRACKRECORD_WOCHEN_HINWEIS ? '<p class="tr-foot">' + window.TRACKRECORD_WOCHEN_HINWEIS + '</p>' : '') +
-      (isW ? '<p class="tr-foot">Wochen laufen von Montag bis Sonntag und zählen zu dem Monat, in dem die meisten ihrer Tage liegen. Die Summe der Wochen kann deshalb vom Monatswert abweichen.</p>' : '');
+      (!isY && m.rueckrechnung ? '<p class="tr-foot">' + (m.rueckrechnungText || '* Rückrechnung mit den Einstellungen vom 11.10.2026') + '</p>' : '') +
+      (isY && m.rueckMonate.length ? '<p class="tr-foot">* Enthält rückgerechnete Zeiträume (' + m.rueckMonate.map(monthName).join(", ") + '); die genauen Zeiträume stehen beim jeweiligen Monat.</p>' : '') +
+      (isY ? '<p class="tr-foot">Das Jahr ist die Summe der Monatsberichte. Längste Verlustserie und größter Rückgang weisen wir nur je Monat aus. Ein neues Jahr erscheint hier mit seinem ersten Monatsbericht.</p>' : '');
 
     prevBtn.disabled = idx === 0;
     nextBtn.disabled = idx === set.length - 1;
@@ -161,7 +169,7 @@
   function go(i) {
     if (i < 0 || i >= set.length || i === idx) return;
     idx = i;
-    if (mode === "monat") monthIdx = i;
+    if (mode === "monat") monthIdx = i; else yearIdx = i;
     body.classList.remove("is-in");
     void body.offsetWidth; // Animation neu starten
     body.classList.add("is-in");
@@ -177,7 +185,7 @@
         d.type = "button";
         d.className = "tr-dot";
         d.setAttribute("role", "tab");
-        d.setAttribute("aria-label", mode === "woche" ? weekName(m) : monthName(m.monat));
+        d.setAttribute("aria-label", mode === "jahr" ? m.name : monthName(m.monat));
         d.addEventListener("click", function () { go(i); });
         dotsEl.appendChild(d);
       });
@@ -190,18 +198,8 @@
     mode = next;
     for (var i = 0; i < modeBtns.length; i++)
       modeBtns[i].setAttribute("aria-pressed", modeBtns[i].getAttribute("data-tr-mode") === mode ? "true" : "false");
-    if (mode === "woche") {
-      // Woche öffnet immer mit der neuesten Woche; "←" führt durch alle Wochen zurück, auch über Monatsgrenzen.
-      if (!allWeeks.length) {
-        set = []; idx = 0;
-        nameEl.textContent = monthName(data[monthIdx].monat);
-        if (labelEl) labelEl.textContent = "Wochenbericht";
-        body.innerHTML = '<p class="tr-empty">' + (window.TRACKRECORD_WOCHEN_HINWEIS || "Es liegen noch keine Wochenwerte vor.") + '</p>';
-        prevBtn.disabled = nextBtn.disabled = true;
-        dotsEl.innerHTML = "";
-        return;
-      }
-      set = allWeeks; idx = allWeeks.length - 1;
+    if (mode === "jahr") {
+      set = years; idx = yearIdx;
     } else {
       set = data; idx = monthIdx;
     }
@@ -211,7 +209,6 @@
   for (var k = 0; k < modeBtns.length; k++) {
     (function (b) { b.addEventListener("click", function () { showMode(b.getAttribute("data-tr-mode")); }); })(modeBtns[k]);
   }
-  if (!allWeeks.length) root.classList.add("no-weeks");
   buildDots();
 
   prevBtn.addEventListener("click", function () { go(idx - 1); });

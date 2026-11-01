@@ -691,7 +691,6 @@ footer {
 .tr.is-single .tr-nav { visibility: hidden; }
 
 .tr-modes { display: flex; gap: 8px; padding: 14px 20px 0; background: var(--surface-2); }
-.tr.no-weeks .tr-modes { display: none; }
 .tr-mode {
   font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
   padding: 7px 16px; border-radius: 999px; border: 1px solid var(--line);
