@@ -63,6 +63,26 @@
 window.TRACKRECORD = [
 
   {
+    monat: "2026-10",
+    rueckrechnung: true,
+    rueckrechnungText: "* 01.–10.10. rückgerechnet mit den Einstellungen vom 11.10.2026 · ab 11.10. tatsächlich verschickt · ab 25.10. nach den neuen Regeln (Variante B)",
+    live: {
+      wetten: 247,
+      treffer: 154,
+      rendite: -1.8,
+      gewinn: -4.5,
+      verlustserie: 5,
+      rueckgang: -12.3,
+      besterTag: 3.1,
+      schlechtesterTag: -7.0
+    },
+    einzelspiele: {
+      tipps: 141,
+      treffer: 111
+    }
+  },
+
+  {
     monat: "2026-09",
     rueckrechnung: true,
     live: {
