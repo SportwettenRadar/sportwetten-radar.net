@@ -11,6 +11,8 @@
     "August", "September", "Oktober", "November", "Dezember"];
   function fussnote(series) {
     var rr = series.filter(function (x) { return x.rr; });
+    /* Komplett als Testphase gerechneter Zeitraum (z. B. September): Zeitraum der ganzen Testphase nennen */
+    if (rr.length && rr.length === series.length) rr = tage.filter(function (x) { return x.rr; });
     var von = rr.length ? rr[0].d : "2026-09-01", bis = rr.length ? rr[rr.length - 1].d : "2026-10-10";
     return "* " + dm(von) + "–" + dm(bis) + ": Testphase, mit den heutigen Regeln berechnet.";
   }
