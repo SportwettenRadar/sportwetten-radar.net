@@ -9,7 +9,11 @@
 
   var MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
     "August", "September", "Oktober", "November", "Dezember"];
-  var FUSSNOTE = "* Sept.–10.10.: Testphase, mit den heutigen Regeln berechnet.";
+  function fussnote(series) {
+    var rr = series.filter(function (x) { return x.rr; });
+    var von = rr.length ? rr[0].d : "2026-09-01", bis = rr.length ? rr[rr.length - 1].d : "2026-10-10";
+    return "* " + dm(von) + "–" + dm(bis) + ": Testphase, mit den heutigen Regeln berechnet.";
+  }
   var PFLICHT = "Alle Zahlen gelten bei gleichem Einsatz auf jede Live-Wette. Verlustserien gehören dazu.";
 
   var data = (window.TRACKRECORD || [])
@@ -133,7 +137,7 @@
       '<div class="trk-top">' + head + lines(L, star) + '</div>' +
       (series.length > 1 ? '<div class="trk-chart">' + chart(series, label) + '</div>' : '') +
       table(key) +
-      (star ? '<p class="trk-foot">' + FUSSNOTE + '</p>' : '') +
+      (star ? '<p class="trk-foot">' + fussnote(series) + '</p>' : '') +
       '<p class="trk-foot">' + PFLICHT + '</p>' +
       '<p class="trk-foot">18+ · Keine Gewinngarantie</p>';
   }
