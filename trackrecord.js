@@ -30,13 +30,13 @@
   function dmy(iso) { return dm(iso) + iso.slice(0, 4); }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
 
-  /* Kennzahlen: jede in eigener Zeile, Einsätze zuerst */
+  /* Kennzahlen: jede in eigener Zeile, Reihenfolge: Wetten, Treffer, Einsätze, Rendite */
   function lines(L, star) {
     var q = L.wetten > 0 ? L.treffer / L.wetten * 100 : 0;
     return '<ul class="trk-lines">' +
-      '<li class="trk-line trk-line--lead"><strong>' + signed(gewinn(L), 1) + '</strong> Einsätze' + (star ? '<sup class="trk-star">*</sup>' : '') + '</li>' +
       '<li class="trk-line"><strong>' + L.wetten + '</strong> Wetten</li>' +
       '<li class="trk-line"><strong>' + L.treffer + '</strong> Treffer (' + de(q, 1) + ' %)</li>' +
+      '<li class="trk-line trk-line--lead"><strong>' + signed(gewinn(L), 1) + '</strong> Einsätze' + (star ? '<sup class="trk-star">*</sup>' : '') + '</li>' +
       '<li class="trk-line">Rendite <strong>' + signed(L.rendite, 1) + ' %</strong></li>' +
     '</ul>';
   }
@@ -97,9 +97,9 @@
       var name = mn + (m.rueckrechnung ? "*" : "");
       var cls = m.monat === activeKey ? ' class="is-active"' : "";
       return '<tr' + cls + '><th scope="row"><a href="monatsbericht-' + m.monat + '.html">' + name + '</a></th>' +
-        '<td>' + signed(gewinn(L), 1) + '</td><td>' + L.wetten + '</td><td>' + L.treffer + ' (' + de(q, 1) + ' %)</td><td>' + signed(L.rendite, 1) + ' %</td></tr>';
+        '<td>' + L.wetten + '</td><td>' + L.treffer + ' (' + de(q, 1) + ' %)</td><td>' + signed(gewinn(L), 1) + '</td><td>' + signed(L.rendite, 1) + ' %</td></tr>';
     }).join("");
-    return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Einsätze</th><th>Wetten</th><th>Treffer</th><th>Rendite</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+    return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Wetten</th><th>Treffer</th><th>Einsätze</th><th>Rendite</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
   function render() {
