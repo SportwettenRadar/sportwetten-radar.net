@@ -152,8 +152,8 @@
           '</div>' +
         '</article>' +
       '</div>' +
-      (!isY && m.rueckrechnung ? '<p class="tr-foot">' + (m.rueckrechnungText || '* Rückrechnung mit den Einstellungen vom 11.10.2026') + '</p>' : '') +
-      (isY && m.rueckMonate.length ? '<p class="tr-foot">* Enthält rückgerechnete Zeiträume (' + m.rueckMonate.map(monthName).join(", ") + '); die genauen Zeiträume stehen beim jeweiligen Monat.</p>' : '') +
+      (!isY && m.rueckrechnung ? '<p class="tr-foot">' + (m.rueckrechnungText || '* Sept.–10.10.: Testphase, mit den heutigen Regeln berechnet.') + '</p>' : '') +
+      (isY && m.rueckMonate.length ? '<p class="tr-foot">* Enthält Testphasen-Zeiträume (' + m.rueckMonate.map(monthName).join(", ") + '); die genauen Zeiträume stehen beim jeweiligen Monat.</p>' : '') +
       (isY ? '<p class="tr-foot">Das Jahr ist die Summe der Monatsberichte. Längste Verlustserie und größter Rückgang weisen wir nur je Monat aus. Ein neues Jahr erscheint hier mit seinem ersten Monatsbericht.</p>' : '');
 
     prevBtn.disabled = idx === 0;

@@ -31,7 +31,7 @@
         beim Abtippen ein Fehler passiert.
       - Jeder Monatsblock endet mit "}," (Komma nicht vergessen).
       - Optional: Die Zeile "rueckrechnung: true," blendet unter dem Monat
-        dezent "* Rückrechnung mit den Einstellungen vom 11.10.2026" ein (eigener Text: rueckrechnungText: "...",
+        dezent "* Sept.–10.10.: Testphase, mit den heutigen Regeln berechnet." ein (eigener Text: rueckrechnungText: "...",
         z. B. fuer Oktober mit den Stichtagen 11.10. und 25.10.). Nur fuer
         nachtraeglich neu gerechnete Monate verwenden (z. B. September 2026).
 
@@ -65,7 +65,7 @@ window.TRACKRECORD = [
   {
     monat: "2026-10",
     rueckrechnung: true,
-    rueckrechnungText: "* 01.–10.10. rückgerechnet mit den Einstellungen vom 11.10.2026 · ab 11.10. tatsächlich verschickt · ab 25.10. nach den neuen Regeln (Variante B)",
+    rueckrechnungText: "* Sept.–10.10.: Testphase, mit den heutigen Regeln berechnet. · ab 11.10. tatsächlich verschickt · ab 25.10. nach den neuen Regeln (Variante B)",
     live: {
       wetten: 247,
       treffer: 154,
@@ -105,7 +105,7 @@ window.TRACKRECORD = [
 
 /* Wochen. Volle Wochen Montag bis Sonntag. Jede Woche gehört zu dem Monat, in dem die meisten ihrer 7 Tage liegen ("monat").
    Beispiel: 28.9. bis 4.10. gehört zum Oktober (4 von 7 Tage). Die Summe der Wochen kann deshalb vom Monat abweichen.
-   Rückrechnungen mit rueckrechnung: true kennzeichnen.
+   Zeiträume der Testphase (bis 10.10.) mit rueckrechnung: true kennzeichnen.
    Pflichtfelder: monat, von, bis, live.wetten, live.treffer, live.rendite, einzelspiele.tipps, einzelspiele.treffer.
    Rendite in Prozent bei gleichem Einsatz je Wette; der Gewinn in Einsätzen wird daraus berechnet (oder als live.gewinn eintragen).
    Verlustserie, rueckgang, besterTag, schlechtesterTag sind optional. */
