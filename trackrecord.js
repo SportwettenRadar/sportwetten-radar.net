@@ -130,10 +130,16 @@
 
   function tabs(fixed) {
     if (fixed) return "";
-    var items = [{ k: "", t: "Seit Start" }].concat(data.slice().reverse().map(function (m) { return { k: m.monat, t: monthName(m.monat) }; }));
-    return '<div class="trk-tabs" role="group" aria-label="Zeitraum">' + items.map(function (i) {
-      return '<button type="button" class="trk-tab" data-k="' + i.k + '" aria-pressed="' + ((active || "") === i.k ? "true" : "false") + '">' + i.t + '</button>';
-    }).join("") + '</div>';
+    function btn(k, t, y) {
+      return '<button type="button" class="trk-tab" data-k="' + k + '" aria-pressed="' + ((active || "") === k ? "true" : "false") + '">' + t + (y ? '<span class="trk-tab-y"> ' + y + '</span>' : '') + '</button>';
+    }
+    /* Erste Zeile: Seit Start. Darunter die Monate, älteste zuerst, drei pro Zeile. */
+    return '<div class="trk-tabs" role="group" aria-label="Zeitraum">' +
+      '<div class="trk-tabs-start">' + btn("", "Seit Start") + '</div>' +
+      '<div class="trk-tabs-months">' + data.map(function (m) {
+        var p = m.monat.split("-");
+        return btn(m.monat, MONATE[parseInt(p[1], 10) - 1], p[0]);
+      }).join("") + '</div></div>';
   }
 
   function render() {
