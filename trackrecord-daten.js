@@ -30,10 +30,8 @@
         Treffer / Anzahl aus. Weicht das Ergebnis vom Bericht ab, ist
         beim Abtippen ein Fehler passiert.
       - Jeder Monatsblock endet mit "}," (Komma nicht vergessen).
-      - Optional: Die Zeile "rueckrechnung: true," blendet unter dem Monat
-        dezent "* Rückrechnung mit den Einstellungen vom 11.10.2026" ein (eigener Text: rueckrechnungText: "...",
-        z. B. fuer Oktober mit den Stichtagen 11.10. und 25.10.). Nur fuer
-        nachtraeglich neu gerechnete Monate verwenden (z. B. September 2026).
+      - Optional: Die Zeile "rueckrechnung: true," ist nur eine Markierung (Logik). Sie zeigt den Stern am Monat
+        und die eine Fußnote unter der Auswertung. Der Text steht in trackrecord.js und wird nie je Monat geändert.
 
    4. Datei speichern und bei GitHub hochladen
       (Repository -> "Add file" -> "Upload files" -> diese Datei ablegen
@@ -65,7 +63,6 @@ window.TRACKRECORD = [
   {
     monat: "2026-10",
     rueckrechnung: true,
-    rueckrechnungText: "* 01.–10.10. rückgerechnet mit den Einstellungen vom 11.10.2026 · ab 11.10. tatsächlich verschickt · ab 25.10. nach den neuen Regeln (Variante B)",
     live: {
       wetten: 247,
       treffer: 154,
@@ -105,7 +102,7 @@ window.TRACKRECORD = [
 
 /* Wochen. Volle Wochen Montag bis Sonntag. Jede Woche gehört zu dem Monat, in dem die meisten ihrer 7 Tage liegen ("monat").
    Beispiel: 28.9. bis 4.10. gehört zum Oktober (4 von 7 Tage). Die Summe der Wochen kann deshalb vom Monat abweichen.
-   Rückrechnungen mit rueckrechnung: true kennzeichnen.
+   Tage vor dem 11.10.2026 mit rueckrechnung: true markieren (nur Logik).
    Pflichtfelder: monat, von, bis, live.wetten, live.treffer, live.rendite, einzelspiele.tipps, einzelspiele.treffer.
    Rendite in Prozent bei gleichem Einsatz je Wette; der Gewinn in Einsätzen wird daraus berechnet (oder als live.gewinn eintragen).
    Verlustserie, rueckgang, besterTag, schlechtesterTag sind optional. */
@@ -180,7 +177,7 @@ window.TRACKRECORD_WOCHEN = [
       verlustserie: 5,
       rueckgang: -10.9,
       besterTag: 2.6,
-      schlechtesterTag: -7.0
+      schlechtesterTag: -7
     },
     einzelspiele: {
       tipps: 35,
@@ -191,3 +188,72 @@ window.TRACKRECORD_WOCHEN = [
 
 /* Hinweis, wenn für einen Monat keine Wochenwerte angezeigt werden können. */
 window.TRACKRECORD_WOCHEN_HINWEIS = "Wochenwerte veröffentlichen wir ab dem 5. Oktober 2026. Frühere Werte stammen aus anderen Bot-Einstellungen und sind nicht vergleichbar. Für frühere Monate zeigen wir den Monatsbericht.";
+
+/* Kurve: kumulierte Einsätze je Tag seit Start (d = Datum, g = Stand am Tagesende, rr = nur Logik für Fußnote/Hinterlegung).
+   Wird von tools/auto_ergebnisse.py aus ergebnisse.json geschrieben, nicht von Hand ändern. */
+window.TRACKRECORD_TAGE = [
+  {"d": "2026-09-01", "g": 0, "rr": true},
+  {"d": "2026-09-02", "g": 1.7, "rr": true},
+  {"d": "2026-09-03", "g": 1.8, "rr": true},
+  {"d": "2026-09-04", "g": 3.5, "rr": true},
+  {"d": "2026-09-05", "g": 3.5, "rr": true},
+  {"d": "2026-09-06", "g": 0.9, "rr": true},
+  {"d": "2026-09-07", "g": 5, "rr": true},
+  {"d": "2026-09-08", "g": 5, "rr": true},
+  {"d": "2026-09-09", "g": 4.2, "rr": true},
+  {"d": "2026-09-10", "g": 4.2, "rr": true},
+  {"d": "2026-09-11", "g": 6.6, "rr": true},
+  {"d": "2026-09-12", "g": 8.6, "rr": true},
+  {"d": "2026-09-13", "g": 6.4, "rr": true},
+  {"d": "2026-09-14", "g": 6.4, "rr": true},
+  {"d": "2026-09-15", "g": 5.4, "rr": true},
+  {"d": "2026-09-16", "g": 6, "rr": true},
+  {"d": "2026-09-17", "g": 6, "rr": true},
+  {"d": "2026-09-18", "g": 6.3, "rr": true},
+  {"d": "2026-09-19", "g": 8.9, "rr": true},
+  {"d": "2026-09-20", "g": 11.4, "rr": true},
+  {"d": "2026-09-21", "g": 11.4, "rr": true},
+  {"d": "2026-09-22", "g": 11.4, "rr": true},
+  {"d": "2026-09-23", "g": 11.4, "rr": true},
+  {"d": "2026-09-24", "g": 11.4, "rr": true},
+  {"d": "2026-09-25", "g": 12.1, "rr": true},
+  {"d": "2026-09-26", "g": 12.7, "rr": true},
+  {"d": "2026-09-27", "g": 12.7, "rr": true},
+  {"d": "2026-09-28", "g": 12.7, "rr": true},
+  {"d": "2026-09-29", "g": 12.7, "rr": true},
+  {"d": "2026-09-30", "g": 12.7, "rr": true},
+  {"d": "2026-10-01", "g": 12.7, "rr": true},
+  {"d": "2026-10-02", "g": 12.7, "rr": true},
+  {"d": "2026-10-03", "g": 13.8, "rr": true},
+  {"d": "2026-10-04", "g": 13.8, "rr": true},
+  {"d": "2026-10-05", "g": 13.8, "rr": true},
+  {"d": "2026-10-06", "g": 13.8, "rr": true},
+  {"d": "2026-10-07", "g": 13.8, "rr": true},
+  {"d": "2026-10-08", "g": 13.8, "rr": true},
+  {"d": "2026-10-09", "g": 12.1, "rr": true},
+  {"d": "2026-10-10", "g": 14.6, "rr": true},
+  {"d": "2026-10-11", "g": 17.4, "rr": false},
+  {"d": "2026-10-12", "g": 16.4, "rr": false},
+  {"d": "2026-10-13", "g": 19.5, "rr": false},
+  {"d": "2026-10-14", "g": 17.5, "rr": false},
+  {"d": "2026-10-15", "g": 17.2, "rr": false},
+  {"d": "2026-10-16", "g": 18.3, "rr": false},
+  {"d": "2026-10-17", "g": 14.5, "rr": false},
+  {"d": "2026-10-18", "g": 9, "rr": false},
+  {"d": "2026-10-19", "g": 8.6, "rr": false},
+  {"d": "2026-10-20", "g": 9.3, "rr": false},
+  {"d": "2026-10-21", "g": 10.1, "rr": false},
+  {"d": "2026-10-22", "g": 11.5, "rr": false},
+  {"d": "2026-10-23", "g": 10.8, "rr": false},
+  {"d": "2026-10-24", "g": 8.9, "rr": false},
+  {"d": "2026-10-25", "g": 11.7, "rr": false},
+  {"d": "2026-10-26", "g": 12.2, "rr": false},
+  {"d": "2026-10-27", "g": 14.8, "rr": false},
+  {"d": "2026-10-28", "g": 14.6, "rr": false},
+  {"d": "2026-10-29", "g": 15.9, "rr": false},
+  {"d": "2026-10-30", "g": 15.2, "rr": false},
+  {"d": "2026-10-31", "g": 8.2, "rr": false}
+];
+
+/* Stand seit Start (Kennzahlen über der Kurve). */
+window.TRACKRECORD_START = {"stand": "2026-10-31", "wetten": 351, "treffer": 227, "gewinn": 8.2, "rendite": 2.3, "rueckrechnung": true};
