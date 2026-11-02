@@ -74,7 +74,7 @@ window.TRACKRECORD = [
       verlustserie: 5,
       rueckgang: -12.3,
       besterTag: 3.1,
-      schlechtesterTag: -7.0
+      schlechtesterTag: -7
     },
     einzelspiele: {
       tipps: 141,
@@ -166,6 +166,25 @@ window.TRACKRECORD_WOCHEN = [
     einzelspiele: {
       tipps: 34,
       treffer: 27
+    }
+  },
+  {
+    monat: "2026-10",
+    von: "2026-10-26",
+    bis: "2026-11-01",
+    live: {
+      wetten: 67,
+      treffer: 39,
+      rendite: -8.3,
+      gewinn: -5.6,
+      verlustserie: 5,
+      rueckgang: -10.9,
+      besterTag: 2.6,
+      schlechtesterTag: -7.0
+    },
+    einzelspiele: {
+      tipps: 35,
+      treffer: 26
     }
   }
 ];
