@@ -36,39 +36,34 @@
   function dmy(iso) { return dm(iso) + iso.slice(0, 4); }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
 
-  /* Kennzahlen: jede in eigener Zeile, Reihenfolge: Wetten, Treffer, Einsätze, Rendite */
-  function lines(L, star) {
+  /* Kennzahlen klein unter der Kurve: Wetten, Treffer, Einsätze, Rendite */
+  function nums(L) {
     var q = L.wetten > 0 ? L.treffer / L.wetten * 100 : 0;
-    return '<ul class="trk-lines">' +
-      '<li class="trk-line"><strong>' + L.wetten + '</strong> Wetten</li>' +
-      '<li class="trk-line"><strong>' + L.treffer + '</strong> Treffer (' + de(q, 1) + ' %)</li>' +
-      '<li class="trk-line trk-line--lead"><strong>' + signed(gewinn(L), 1) + '</strong> Einsätze' + (star ? '<sup class="trk-star">*</sup>' : '') + '</li>' +
-      '<li class="trk-line">Rendite <strong>' + signed(L.rendite, 1) + ' %</strong></li>' +
-    '</ul>';
+    return '<dl class="trk-nums">' +
+      '<div><dt>Wetten</dt><dd>' + L.wetten + '</dd></div>' +
+      '<div><dt>Treffer</dt><dd>' + L.treffer + ' <small>(' + de(q, 1) + ' %)</small></dd></div>' +
+      '<div><dt>Einsätze</dt><dd>' + signed(gewinn(L), 1) + '</dd></div>' +
+      '<div><dt>Rendite</dt><dd>' + signed(L.rendite, 1) + ' %</dd></div>' +
+    '</dl>';
   }
 
-  function ticks(lo, hi) {
-    var span = hi - lo, step = span > 40 ? 10 : span > 16 ? 5 : span > 8 ? 2 : 1, t = [];
-    for (var v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) t.push(v);
-    return t;
-  }
-
-  /* Eine Linie: kumulierte Einsätze je Tag, Nulllinie gestrichelt, letzter Wert als Punkt, ab Livestart hinterlegt */
-  function chart(series, label) {
+  /* Die große Kurve: kumulierte Einsätze je Tag, Skala am rechten Rand, Nulllinie gestrichelt,
+     letzter Wert als Punkt mit Beschriftung, Bereich ab Livestart hinterlegt. */
+  function chart(series, label, W) {
     if (series.length < 2) return "";
-    var cw = body.clientWidth || 640, W = Math.max(300, Math.min(640, cw)), H = W < 480 ? 220 : 260;
-    var L = 40, R = 14, T = 16, B = 28, n = series.length;
+    var H = W < 520 ? 300 : Math.round(W * 0.46);
+    var L = 12, R = 46, T = 20, B = 32, n = series.length;
     var vals = series.map(function (s) { return s.g; });
     var lo = Math.min(0, Math.min.apply(null, vals)), hi = Math.max(0, Math.max.apply(null, vals));
-    var pad = Math.max(1, (hi - lo) * 0.08); lo -= pad; hi += pad;
+    var pad = Math.max(1, (hi - lo) * 0.1); lo -= pad; hi += pad;
     function X(i) { return L + i / (n - 1) * (W - L - R); }
     function Y(v) { return T + (1 - (v - lo) / (hi - lo)) * (H - T - B); }
-    var g = "";
-    ticks(lo, hi).forEach(function (v) {
-      if (v === 0) return;
+    var span = hi - lo, step = span > 30 ? 10 : span > 14 ? 5 : span > 7 ? 2 : 1, g = "";
+    for (var v = Math.ceil(lo / step) * step; v <= hi; v += step) {
+      if (v === 0) continue;
       g += '<line class="trk-grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v).toFixed(1) + '" y2="' + Y(v).toFixed(1) + '"/>' +
-           '<text class="trk-ax" x="' + (L - 8) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + signed(v, 0) + '</text>';
-    });
+           '<text class="trk-ax" x="' + (W - R + 8) + '" y="' + (Y(v) + 4).toFixed(1) + '">' + signed(v, 0) + '</text>';
+    }
     var li = -1;
     for (var i = 0; i < n; i++) { if (!series[i].rr) { li = i; break; } }
     if (li > 0) {
@@ -78,20 +73,43 @@
       g += '<text class="trk-ax trk-ax--live" x="' + (L + 8) + '" y="' + (T + 14) + '">live</text>';
     }
     g += '<line class="trk-zero" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(0).toFixed(1) + '" y2="' + Y(0).toFixed(1) + '"/>' +
-         '<text class="trk-ax" x="' + (L - 8) + '" y="' + (Y(0) + 4).toFixed(1) + '" text-anchor="end">0</text>';
+         '<text class="trk-ax" x="' + (W - R + 8) + '" y="' + (Y(0) + 4).toFixed(1) + '">0</text>';
     g += '<polyline class="trk-curve" points="' + series.map(function (s, k) { return X(k).toFixed(1) + "," + Y(s.g).toFixed(1); }).join(" ") + '"/>';
     var last = series[n - 1], lx = X(n - 1), ly = Y(last.g);
-    g += '<circle class="trk-dot" cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="4.5"/>' +
-         '<text class="trk-end" x="' + (lx - 9).toFixed(1) + '" y="' + (ly - 11).toFixed(1) + '" text-anchor="end">' + signed(last.g, 1) + '</text>';
-    /* Datumsmarken: erster Tag, Monatsanfänge, letzter Tag */
+    g += '<circle class="trk-dot" cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="6"/>' +
+         '<text class="trk-end" x="' + (lx - 12).toFixed(1) + '" y="' + Math.min(ly + 28, H - B - 8).toFixed(1) + '" text-anchor="end">' + signed(last.g, 1) + ' Einsätze</text>';
     var marks = [0];
-    for (var k = 1; k < n; k++) if (series[k].d.slice(8) === "01" && k < n - 3) marks.push(k);
-    if (n - 1 > 0) marks.push(n - 1);
+    for (var k = 1; k < n - 4; k++) if (series[k].d.slice(8) === "01") marks.push(k);
+    marks.push(n - 1);
     marks.forEach(function (k, idx) {
-      var anchor = idx === 0 ? "start" : k === n - 1 ? "end" : "middle";
-      g += '<text class="trk-ax" x="' + X(k).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' + anchor + '">' + dm(series[k].d) + '</text>';
+      g += '<text class="trk-ax" x="' + (k === n - 1 ? W - R : X(k)).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' + (idx === 0 ? "start" : k === n - 1 ? "end" : "middle") + '">' + dm(series[k].d) + '</text>';
     });
-    return '<svg class="trk-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(label) + '">' + g + '</svg>';
+    g += '<g class="trk-cur" style="display:none"><line class="trk-cursor" y1="' + T + '" y2="' + (H - B) + '"/><circle class="trk-dot" r="4.5"/><text class="trk-tip"></text></g>';
+    return '<svg class="trk-svg" viewBox="0 0 ' + W + ' ' + H + '" height="' + H + '" role="img" aria-label="' + esc(label) + '" data-w="' + W + '">' + g + '</svg>';
+  }
+
+  /* Tooltip beim Darüberfahren: Datum und Stand */
+  function bindCursor(series) {
+    var svg = body.querySelector(".trk-svg");
+    if (!svg) return;
+    var W = parseFloat(svg.getAttribute("data-w")), H = parseFloat(svg.getAttribute("height")), n = series.length;
+    var L = 12, R = 46, T = 20, B = 32;
+    var vals = series.map(function (s) { return s.g; });
+    var lo = Math.min(0, Math.min.apply(null, vals)), hi = Math.max(0, Math.max.apply(null, vals));
+    var pad = Math.max(1, (hi - lo) * 0.1); lo -= pad; hi += pad;
+    function X(i) { return L + i / (n - 1) * (W - L - R); }
+    function Y(v) { return T + (1 - (v - lo) / (hi - lo)) * (H - T - B); }
+    var c = svg.querySelector(".trk-cur"), cl = c.querySelector("line"), cc = c.querySelector("circle"), ct = c.querySelector("text");
+    svg.onpointermove = function (ev) {
+      var r = svg.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width * W;
+      var k = Math.max(0, Math.min(n - 1, Math.round((x - L) / (W - L - R) * (n - 1))));
+      c.style.display = "";
+      cl.setAttribute("x1", X(k)); cl.setAttribute("x2", X(k)); cc.setAttribute("cx", X(k)); cc.setAttribute("cy", Y(series[k].g));
+      ct.textContent = dm(series[k].d) + "  " + signed(series[k].g, 1);
+      var right = k > n * 0.7;
+      ct.setAttribute("text-anchor", right ? "end" : "start"); ct.setAttribute("x", X(k) + (right ? -8 : 8)); ct.setAttribute("y", T + 30);
+    };
+    svg.onpointerleave = function () { c.style.display = "none"; };
   }
 
   /* Monatstabelle */
@@ -108,9 +126,21 @@
     return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Wetten</th><th>Treffer</th><th>Einsätze</th><th>Rendite</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
+  var active = null; /* null = seit Start, sonst "JJJJ-MM" (Reiter auf der Startseite) */
+
+  function tabs(fixed) {
+    if (fixed) return "";
+    var items = [{ k: "", t: "Seit Start" }].concat(data.slice().reverse().map(function (m) { return { k: m.monat, t: monthName(m.monat) }; }));
+    return '<div class="trk-tabs" role="group" aria-label="Zeitraum">' + items.map(function (i) {
+      return '<button type="button" class="trk-tab" data-k="' + i.k + '" aria-pressed="' + ((active || "") === i.k ? "true" : "false") + '">' + i.t + '</button>';
+    }).join("") + '</div>';
+  }
+
   function render() {
-    var key = root.getAttribute("data-tr-monat");
-    var head, L, series, star, label;
+    var fixed = root.getAttribute("data-tr-monat");
+    var key = fixed || active;
+    var L, series, star, title, label;
+    var W = Math.max(300, Math.min(960, body.clientWidth - 32 || 900));
     if (key) {
       var m = data.filter(function (x) { return x.monat === key; })[0] || data[data.length - 1];
       key = m.monat; L = m.live;
@@ -118,8 +148,8 @@
       tage.forEach(function (t) { if (t.d.slice(0, 7) < key) prev = t.g; });
       series = days.map(function (t) { return { d: t.d, g: Math.round((t.g - prev) * 10) / 10, rr: !!t.rr }; });
       star = !!m.rueckrechnung;
-      head = '<span class="trk-kicker">Monat</span><h3 class="trk-title">' + monthName(key) + '</h3>';
-      label = "Kumulierte Einsätze je Tag im " + monthName(key);
+      title = monthName(key);
+      label = "Kumulierte Einsätze je Tag im " + monthName(key) + ", Stand " + signed(gewinn(L), 1);
     } else {
       var S = window.TRACKRECORD_START, w = 0, t = 0, gw = 0;
       if (S) { L = { wetten: S.wetten, treffer: S.treffer, rendite: S.rendite, gewinn: S.gewinn }; }
@@ -132,16 +162,22 @@
       star = data.some(function (x) { return x.rueckrechnung; }) || series.some(function (x) { return x.rr; });
       var first = series.length ? series[0].d : (data[0].monat + "-01");
       var stand = (S && S.stand) || (series.length ? series[series.length - 1].d : "");
-      head = '<span class="trk-kicker">Seit Start</span><h3 class="trk-title">Seit ' + dmy(first) + (stand ? ' · Stand ' + dmy(stand) : '') + '</h3>';
-      label = "Kumulierte Einsätze je Tag seit " + dmy(first);
+      title = "Seit " + dmy(first) + (stand ? " · Stand " + dmy(stand) : "");
+      label = "Kumulierte Einsätze je Tag seit " + dmy(first) + ", Stand " + signed(gewinn(L), 1);
     }
     body.innerHTML =
-      '<div class="trk-top">' + head + lines(L, star) + '</div>' +
-      (series.length > 1 ? '<div class="trk-chart">' + chart(series, label) + '</div>' : '') +
+      tabs(!!fixed) +
+      '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">' + title + (star ? '<sup class="trk-star">*</sup>' : '') + '</span>' +
+        (series.length > 1 ? '<span class="trk-hero-sub">Kumulierte Einsätze je Tag</span>' : '') + '</div>' +
+        chart(series, label, W) + nums(L) + '</section>' +
       table(key) +
       (star ? '<p class="trk-foot">' + fussnote(series) + '</p>' : '') +
       '<p class="trk-foot">' + PFLICHT + '</p>' +
       '<p class="trk-foot">18+ · Keine Gewinngarantie</p>';
+    bindCursor(series);
+    Array.prototype.forEach.call(body.querySelectorAll(".trk-tab"), function (b) {
+      b.addEventListener("click", function () { active = b.getAttribute("data-k") || null; render(); });
+    });
   }
   render();
   var rt, lastW = body.clientWidth;
