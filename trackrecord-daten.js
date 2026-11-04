@@ -156,11 +156,11 @@ window.TRACKRECORD_WOCHEN = [
       wetten: 38,
       treffer: 27,
       rendite: 13.3,
-      gewinn: 5.0,
+      gewinn: 5,
       verlustserie: 2,
       rueckgang: -2.4,
       besterTag: 2.6,
-      schlechtesterTag: -1.0
+      schlechtesterTag: -1
     },
     einzelspiele: {
       tipps: 29,
@@ -178,7 +178,7 @@ window.TRACKRECORD_WOCHEN = [
       rendite: 63.8,
       gewinn: 1.3,
       verlustserie: 0,
-      rueckgang: -0.0,
+      rueckgang: 0,
       besterTag: 0.7,
       schlechtesterTag: 0.6
     },
@@ -198,7 +198,7 @@ window.TRACKRECORD_WOCHEN = [
       rendite: 57.5,
       gewinn: 1.2,
       verlustserie: 0,
-      rueckgang: -0.0,
+      rueckgang: 0,
       besterTag: 1.2,
       schlechtesterTag: 1.2
     },
@@ -354,8 +354,9 @@ window.TRACKRECORD_TAGE = [
   {"d": "2026-10-30", "g": 15.2, "rr": false},
   {"d": "2026-10-31", "g": 8.2, "rr": false},
   {"d": "2026-11-01", "g": 6.1, "rr": false},
-  {"d": "2026-11-02", "g": 5.3, "rr": false}
+  {"d": "2026-11-02", "g": 5.3, "rr": false},
+  {"d": "2026-11-03", "g": 4.4, "rr": false}
 ];
 
 /* Stand seit Start (Kennzahlen über der Kurve). */
-window.TRACKRECORD_START = {"stand": "2026-11-02", "wetten": 365, "treffer": 234, "gewinn": 5.3, "rendite": 1.4, "rueckrechnung": true};
+window.TRACKRECORD_START = {"stand": "2026-11-03", "wetten": 369, "treffer": 236, "gewinn": 4.4, "rendite": 1.2, "rueckrechnung": true};
