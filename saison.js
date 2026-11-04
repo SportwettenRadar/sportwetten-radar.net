@@ -1,7 +1,7 @@
 /* =====================================================================
    SAISONKALENDER
    Werte = durchschnittliche Anzahl Spiele pro Monat in den Ligen der
-   Live-Wetten-Weissliste (Stand Oktober 2026), Saisons 2024/25 und
+   bisher ausgewaehlten Ligen der Live-Wetten (Stand Oktober 2026), Saisons 2024/25 und
    2025/26, ohne WM/EM. Europa aus Spielplaenen (openfootball), J1 League
    ab 2026/27 im neuen August-bis-Juni-Rhythmus, Superettan geschaetzt.
    Suedamerika-Ligen nicht gezaehlt: Anstoss fast nur nachts, ausserhalb
