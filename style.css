@@ -1293,3 +1293,6 @@ section[id] { scroll-margin-top: 76px; }
 .trk-nums dd small { color: var(--text-muted); font-weight: 400; font-size: 13px; }
 .trk .trk-table-wrap { margin-top: 20px; }
 @media (max-width: 560px) { .trk-nums { grid-template-columns: 1fr 1fr; } .trk-hero { padding: 16px 8px 12px; } }
+
+/* Beta-Hinweis unter dem Trackrecord */
+.tr-beta { margin: 14px 0 0; font-size: 0.82rem; line-height: 1.5; color: var(--muted, #8aa0b5); text-align: left; }
