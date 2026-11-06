@@ -356,8 +356,9 @@ window.TRACKRECORD_TAGE = [
   {"d": "2026-11-01", "g": 6.1, "rr": false},
   {"d": "2026-11-02", "g": 5.3, "rr": false},
   {"d": "2026-11-03", "g": 4.4, "rr": false},
-  {"d": "2026-11-04", "g": 4.8, "rr": false}
+  {"d": "2026-11-04", "g": 4.8, "rr": false},
+  {"d": "2026-11-05", "g": 3.8, "rr": false}
 ];
 
 /* Stand seit Start (Kennzahlen über der Kurve). */
-window.TRACKRECORD_START = {"stand": "2026-11-04", "wetten": 370, "treffer": 237, "gewinn": 4.8, "rendite": 1.3, "rueckrechnung": true};
+window.TRACKRECORD_START = {"stand": "2026-11-05", "wetten": 374, "treffer": 239, "gewinn": 3.8, "rendite": 1.0, "rueckrechnung": true};
