@@ -16,7 +16,8 @@ window.TRACKRECORD = [
     live: {
       wetten: 247,
       treffer: 154,
-      verlustserie: 5
+      verlustserie: 5,
+      quote: 1.57
     },
     einzelspiele: {
       tipps: 141,
@@ -30,7 +31,8 @@ window.TRACKRECORD = [
     live: {
       wetten: 104,
       treffer: 73,
-      verlustserie: 3
+      verlustserie: 3,
+      quote: 1.6
     },
     einzelspiele: {
       tipps: 49,
@@ -50,7 +52,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 23,
       treffer: 15,
-      verlustserie: 2
+      verlustserie: 2,
+      quote: 1.6
     },
     einzelspiele: {
       tipps: 0,
@@ -65,7 +68,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 41,
       treffer: 29,
-      verlustserie: 3
+      verlustserie: 3,
+      quote: 1.6
     },
     einzelspiele: {
       tipps: 0,
@@ -80,7 +84,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 38,
       treffer: 27,
-      verlustserie: 2
+      verlustserie: 2,
+      quote: 1.59
     },
     einzelspiele: {
       tipps: 29,
@@ -95,7 +100,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 2,
       treffer: 2,
-      verlustserie: 0
+      verlustserie: 0,
+      quote: 1.64
     },
     einzelspiele: {
       tipps: 15,
@@ -110,7 +116,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 2,
       treffer: 2,
-      verlustserie: 0
+      verlustserie: 0,
+      quote: 1.58
     },
     einzelspiele: {
       tipps: 21,
@@ -125,7 +132,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 42,
       treffer: 29,
-      verlustserie: 3
+      verlustserie: 3,
+      quote: 1.57
     },
     einzelspiele: {
       tipps: 27,
@@ -255,5 +263,5 @@ window.TRACKRECORD_TAGE = [
 
 /* Kalenderjahre: Wetten, Treffer, Ø-Quote; gewinn (Einsätze) und rendite sind null, solange das Jahr unter 100 Live-Wetten hat. */
 window.TRACKRECORD_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-05", "wetten": 374, "treffer": 239, "gewinn": 3.8, "rendite": 1.0, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-05", "wetten": 374, "treffer": 239, "quote": 1.58, "gewinn": 3.8, "rendite": 1.0, "rueckrechnung": true}
 ];
