@@ -1,61 +1,11 @@
 /* =====================================================================
-   TRACKRECORD-DATEN  —  die einzige Datei, die du jeden Monat änderst
-   =====================================================================
+   TRACKRECORD-DATEN  —  wird von tools/auto_ergebnisse.py aus daten/ergebnisse.json
+   (und daten/signale.json für die Ø-Quote) geschrieben. Nicht von Hand ändern.
 
-   SO PFLEGST DU EINEN NEUEN MONAT (ca. 3 Minuten, am 1. jedes Monats):
-
-   1. Monatsbericht im Telegram-Kanal öffnen.
-   2. Den Block unten "VORLAGE" kopieren und OBEN in die Liste einfügen
-      (direkt unter "window.TRACKRECORD = [") — neuester Monat steht oben.
-   3. Die Zahlen aus dem Monatsbericht abtippen:
-
-        Monatsbericht                          ->  Feld hier
-        ---------------------------------------------------------------
-        Live-Wetten: 177                       ->  wetten: 177
-        Treffer: 126 (71,2 %)                  ->  treffer: 126
-        Rendite: +13,8 %                       ->  rendite: 13.8
-        (Gewinn in Einsätzen rechnet die Seite selbst: Rendite × Live-Wetten.
-         Steht er im Bericht genauer, optional: gewinn: 24.4)
-        Längste Verlustserie: 4 in Folge       ->  verlustserie: 4
-        Größter Rückgang: -4,9 Einsätze        ->  rueckgang: -4.9
-        Bester Tag: +5,3 Einsätze              ->  besterTag: 5.3
-        Schlechtester Tag: -2,2 Einsätze       ->  schlechtesterTag: -2.2
-        Einzelspiele Tipps: 49                 ->  tipps: 49
-        Einzelspiele Treffer: 39 (79,6 %)      ->  treffer: 39
-
-      WICHTIG:
-      - Dezimalzahlen mit PUNKT, nicht mit Komma (13.8 statt 13,8).
-      - Minuszeichen als normales "-" tippen.
-      - Prozentwerte NICHT eintragen — die Seite rechnet sie selbst aus
-        Treffer / Anzahl aus. Weicht das Ergebnis vom Bericht ab, ist
-        beim Abtippen ein Fehler passiert.
-      - Jeder Monatsblock endet mit "}," (Komma nicht vergessen).
-      - Optional: Die Zeile "rueckrechnung: true," ist nur eine Markierung (Logik). Sie zeigt den Stern am Monat
-        und die eine Fußnote unter der Auswertung. Der Text steht in trackrecord.js und wird nie je Monat geändert.
-
-   4. Datei speichern und bei GitHub hochladen
-      (Repository -> "Add file" -> "Upload files" -> diese Datei ablegen
-      -> "Commit changes"). Nach 1–2 Minuten ist der Monat online.
-
-   VORLAGE (kopieren, nicht hier ändern):
-
-  {
-    monat: "2026-10",
-    live: {
-      wetten: 0,
-      treffer: 0,
-      rendite: 0.0,
-      verlustserie: 0,
-      rueckgang: 0.0,
-      besterTag: 0.0,
-      schlechtesterTag: 0.0
-    },
-    einzelspiele: {
-      tipps: 0,
-      treffer: 0
-    }
-  },
-
+   Anzeige-Regeln (Daniel, 06.11.2026):
+   - Tage, Wochen, Monate: Wetten, Treffer (mit Prozent) und Ø-Quote. KEINE Einsätze, KEINE Rendite.
+   - Einsätze und Rendite nur je Kalenderjahr (TRACKRECORD_JAHRE) und erst ab 100 Live-Wetten im Jahr.
+   - Ø-Quote = Durchschnitt der Quoten aller gesetzten Live-Wetten des Zeitraums.
    ===================================================================== */
 
 window.TRACKRECORD = [
@@ -66,12 +16,7 @@ window.TRACKRECORD = [
     live: {
       wetten: 247,
       treffer: 154,
-      rendite: -1.8,
-      gewinn: -4.5,
-      verlustserie: 5,
-      rueckgang: -12.3,
-      besterTag: 3.1,
-      schlechtesterTag: -7
+      verlustserie: 5
     },
     einzelspiele: {
       tipps: 141,
@@ -85,12 +30,7 @@ window.TRACKRECORD = [
     live: {
       wetten: 104,
       treffer: 73,
-      rendite: 12.2,
-      verlustserie: 3,
-      rueckgang: -5,
-      besterTag: 4.1,
-      schlechtesterTag: -2.7,
-      gewinn: 12.7
+      verlustserie: 3
     },
     einzelspiele: {
       tipps: 49,
@@ -100,12 +40,7 @@ window.TRACKRECORD = [
 
 ];
 
-/* Wochen. Volle Wochen Montag bis Sonntag. Jede Woche gehört zu dem Monat, in dem die meisten ihrer 7 Tage liegen ("monat").
-   Beispiel: 28.9. bis 4.10. gehört zum Oktober (4 von 7 Tage). Die Summe der Wochen kann deshalb vom Monat abweichen.
-   Tage vor dem 11.10.2026 mit rueckrechnung: true markieren (nur Logik).
-   Pflichtfelder: monat, von, bis, live.wetten, live.treffer, live.rendite, einzelspiele.tipps, einzelspiele.treffer.
-   Rendite in Prozent bei gleichem Einsatz je Wette; der Gewinn in Einsätzen wird daraus berechnet (oder als live.gewinn eintragen).
-   Verlustserie, rueckgang, besterTag, schlechtesterTag sind optional. */
+/* Wochen (Mo–So). Der Monat ist der Mehrheitsmonat der Woche. */
 window.TRACKRECORD_WOCHEN = [
   {
     monat: "2026-09",
@@ -115,12 +50,7 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 23,
       treffer: 15,
-      rendite: 3.8,
-      gewinn: 0.9,
-      verlustserie: 2,
-      rueckgang: -3.5,
-      besterTag: 1.7,
-      schlechtesterTag: -2.7
+      verlustserie: 2
     },
     einzelspiele: {
       tipps: 0,
@@ -135,12 +65,7 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 41,
       treffer: 29,
-      rendite: 13.3,
-      gewinn: 5.5,
-      verlustserie: 3,
-      rueckgang: -4.2,
-      besterTag: 4.1,
-      schlechtesterTag: -2.3
+      verlustserie: 3
     },
     einzelspiele: {
       tipps: 0,
@@ -155,12 +80,7 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 38,
       treffer: 27,
-      rendite: 13.3,
-      gewinn: 5,
-      verlustserie: 2,
-      rueckgang: -2.4,
-      besterTag: 2.6,
-      schlechtesterTag: -1
+      verlustserie: 2
     },
     einzelspiele: {
       tipps: 29,
@@ -175,12 +95,7 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 2,
       treffer: 2,
-      rendite: 63.8,
-      gewinn: 1.3,
-      verlustserie: 0,
-      rueckgang: 0,
-      besterTag: 0.7,
-      schlechtesterTag: 0.6
+      verlustserie: 0
     },
     einzelspiele: {
       tipps: 15,
@@ -195,12 +110,7 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 2,
       treffer: 2,
-      rendite: 57.5,
-      gewinn: 1.2,
-      verlustserie: 0,
-      rueckgang: 0,
-      besterTag: 1.2,
-      schlechtesterTag: 1.2
+      verlustserie: 0
     },
     einzelspiele: {
       tipps: 21,
@@ -215,12 +125,7 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 42,
       treffer: 29,
-      rendite: 8.5,
-      gewinn: 3.6,
-      verlustserie: 3,
-      rueckgang: -3.3,
-      besterTag: 2.8,
-      schlechtesterTag: -1.7
+      verlustserie: 3
     },
     einzelspiele: {
       tipps: 27,
@@ -234,12 +139,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 75,
       treffer: 42,
-      rendite: -11.3,
-      gewinn: -8.4,
       verlustserie: 5,
-      rueckgang: -11.1,
-      besterTag: 3.1,
-      schlechtesterTag: -5.5
+      quote: 1.58
     },
     einzelspiele: {
       tipps: 34,
@@ -253,12 +154,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 71,
       treffer: 47,
-      rendite: 3.9,
-      gewinn: 2.7,
       verlustserie: 4,
-      rueckgang: -5.6,
-      besterTag: 2.8,
-      schlechtesterTag: -1.9
+      quote: 1.57
     },
     einzelspiele: {
       tipps: 34,
@@ -272,12 +169,8 @@ window.TRACKRECORD_WOCHEN = [
     live: {
       wetten: 67,
       treffer: 39,
-      rendite: -8.3,
-      gewinn: -5.6,
       verlustserie: 5,
-      rueckgang: -10.9,
-      besterTag: 2.6,
-      schlechtesterTag: -7
+      quote: 1.57
     },
     einzelspiele: {
       tipps: 35,
@@ -289,8 +182,8 @@ window.TRACKRECORD_WOCHEN = [
 /* Hinweis, wenn für einen Monat keine Wochenwerte angezeigt werden können. */
 window.TRACKRECORD_WOCHEN_HINWEIS = "Wochenwerte veröffentlichen wir ab dem 5. Oktober 2026. Frühere Werte stammen aus anderen Bot-Einstellungen und sind nicht vergleichbar. Für frühere Monate zeigen wir den Monatsbericht.";
 
-/* Kurve: kumulierte Einsätze je Tag seit Start (d = Datum, g = Stand am Tagesende, rr = nur Logik für Fußnote/Hinterlegung).
-   Wird von tools/auto_ergebnisse.py aus ergebnisse.json geschrieben, nicht von Hand ändern. */
+/* Kurve: kumulierte Einsätze je Tag, je Kalenderjahr bei 0 beginnend (d = Datum, g = Stand am Tagesende, rr = nur Logik für Fußnote/Hinterlegung).
+   Ein Jahr erscheint erst ab 100 Live-Wetten. */
 window.TRACKRECORD_TAGE = [
   {"d": "2026-09-01", "g": 0.0, "rr": true},
   {"d": "2026-09-02", "g": 1.7, "rr": true},
@@ -360,5 +253,7 @@ window.TRACKRECORD_TAGE = [
   {"d": "2026-11-05", "g": 3.8, "rr": false}
 ];
 
-/* Stand seit Start (Kennzahlen über der Kurve). */
-window.TRACKRECORD_START = {"stand": "2026-11-05", "wetten": 374, "treffer": 239, "gewinn": 3.8, "rendite": 1.0, "rueckrechnung": true};
+/* Kalenderjahre: Wetten, Treffer, Ø-Quote; gewinn (Einsätze) und rendite sind null, solange das Jahr unter 100 Live-Wetten hat. */
+window.TRACKRECORD_JAHRE = [
+  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-05", "wetten": 374, "treffer": 239, "gewinn": 3.8, "rendite": 1.0, "rueckrechnung": true}
+];

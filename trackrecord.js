@@ -1,6 +1,8 @@
-/* Trackrecord — liest window.TRACKRECORD (Monate), window.TRACKRECORD_TAGE (kumulierte Einsätze je Tag)
-   und window.TRACKRECORD_START (Stand seit Start) aus trackrecord-daten.js.
-   Startseite: Gesamtbilanz seit Start. Monatsseiten: <div data-tr data-tr-monat="JJJJ-MM">.
+/* Trackrecord — liest window.TRACKRECORD (Monate), window.TRACKRECORD_JAHRE (Kalenderjahre)
+   und window.TRACKRECORD_TAGE (kumulierte Einsätze je Tag, je Jahr bei 0 beginnend) aus trackrecord-daten.js.
+   Anzeige-Regeln: Monate zeigen Wetten, Treffer (mit Prozent) und Ø-Quote. Einsätze und Rendite gibt es nur im Jahr,
+   und erst ab 100 Live-Wetten (die Daten dafür kommen als null, solange das Jahr darunter liegt).
+   Startseite und Übersicht: Jahr + Monatstabelle. Monatsseiten: <div data-tr data-tr-monat="JJJJ-MM">.
    Diese Datei muss für neue Monate nicht angefasst werden. */
 (function () {
   var root = document.querySelector("[data-tr]");
@@ -17,11 +19,15 @@
     return "* " + dm(von) + "–" + dm(bis) + ": Testphase, mit den Regeln vom 11.10.2026 berechnet.";
   }
   var PFLICHT = "Alle Zahlen gelten bei gleichem Einsatz auf jede Live-Wette. Verlustserien gehören dazu.";
+  var QUOTE_DEF = "Ø-Quote: Durchschnitt der Quoten aller gesetzten Live-Wetten im Zeitraum.";
+  var HINWEIS = "Einsätze und Rendite weisen wir je Kalenderjahr aus, sobald 100 Live-Wetten vorliegen. " +
+    "Für Tage, Wochen und Monate nicht, weil kurze Zeiträume stark vom Zufall abhängen.";
 
   var data = (window.TRACKRECORD || [])
     .filter(function (m) { return m && /^\d{4}-\d{2}$/.test(m.monat); })
     .sort(function (a, b) { return a.monat < b.monat ? -1 : 1; });
   var tage = (window.TRACKRECORD_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
+  var jahre = (window.TRACKRECORD_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
 
   if (!data.length) {
     body.innerHTML = '<p class="trk-empty">Der erste Monatsbericht erscheint am 1. des kommenden Monats.</p>';
@@ -30,24 +36,25 @@
 
   function de(n, k) { return n.toLocaleString("de-DE", { minimumFractionDigits: k, maximumFractionDigits: k }); }
   function signed(n, k) { return n > 0 ? "+" + de(n, k) : n < 0 ? "−" + de(Math.abs(n), k) : de(0, k); }
-  function gewinn(L) { return (typeof L.gewinn === "number") ? L.gewinn : Math.round(L.rendite * L.wetten) / 100; }
   function monthName(key) { var p = key.split("-"); return MONATE[parseInt(p[1], 10) - 1] + " " + p[0]; }
   function dm(iso) { var p = iso.split("-"); return p[2] + "." + p[1] + "."; }
   function dmy(iso) { return dm(iso) + iso.slice(0, 4); }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function isNum(x) { return typeof x === "number"; }
 
-  /* Kennzahlen klein unter der Kurve: Wetten, Treffer, Einsätze, Rendite */
+  /* Kennzahlen klein unter der Kurve: Wetten, Treffer, Ø-Quote; Einsätze und Rendite nur, wenn mitgegeben (Jahr ab 100 Wetten) */
   function nums(L) {
     var q = L.wetten > 0 ? L.treffer / L.wetten * 100 : 0;
     return '<dl class="trk-nums">' +
       '<div><dt>Wetten</dt><dd>' + L.wetten + '</dd></div>' +
       '<div><dt>Treffer</dt><dd>' + L.treffer + ' <small>(' + de(q, 1) + ' %)</small></dd></div>' +
-      '<div><dt>Einsätze</dt><dd>' + signed(gewinn(L), 1) + '</dd></div>' +
-      '<div><dt>Rendite</dt><dd>' + signed(L.rendite, 1) + ' %</dd></div>' +
+      (isNum(L.quote) ? '<div><dt>Ø-Quote</dt><dd>' + de(L.quote, 2) + '</dd></div>' : '') +
+      (isNum(L.gewinn) ? '<div><dt>Einsätze</dt><dd>' + signed(L.gewinn, 1) + '</dd></div>' : '') +
+      (isNum(L.rendite) ? '<div><dt>Rendite</dt><dd>' + signed(L.rendite, 1) + ' %</dd></div>' : '') +
     '</dl>';
   }
 
-  /* Die große Kurve: kumulierte Einsätze je Tag, Skala am rechten Rand, Nulllinie gestrichelt,
+  /* Die große Kurve (nur Jahr, nur ab 100 Wetten): kumulierte Einsätze je Tag, Skala am rechten Rand, Nulllinie gestrichelt,
      letzter Wert als Punkt mit Beschriftung, Bereich ab Livestart hinterlegt. */
   function chart(series, label, W) {
     if (series.length < 2) return "";
@@ -112,8 +119,9 @@
     svg.onpointerleave = function () { c.style.display = "none"; };
   }
 
-  /* Monatstabelle */
+  /* Monatstabelle: Wetten, Treffer (mit Prozent), Ø-Quote (nur, wenn mindestens ein Monat sie hat) */
   function table(activeKey) {
+    var mitQuote = data.some(function (m) { return isNum(m.live.quote); });
     var rows = data.slice().reverse().map(function (m) {
       var L = m.live, q = L.wetten > 0 ? L.treffer / L.wetten * 100 : 0;
       var mn = monthName(m.monat);
@@ -121,66 +129,63 @@
       var name = mn + (m.rueckrechnung ? "*" : "");
       var cls = m.monat === activeKey ? ' class="is-active"' : "";
       return '<tr' + cls + '><th scope="row"><a href="monatsbericht-' + m.monat + '.html">' + name + '</a></th>' +
-        '<td>' + L.wetten + '</td><td>' + L.treffer + ' (' + de(q, 1) + ' %)</td><td>' + signed(gewinn(L), 1) + '</td><td>' + signed(L.rendite, 1) + ' %</td></tr>';
+        '<td>' + L.wetten + '</td><td>' + L.treffer + ' (' + de(q, 1) + ' %)</td>' +
+        (mitQuote ? '<td>' + (isNum(L.quote) ? de(L.quote, 2) : "–") + '</td>' : '') + '</tr>';
     }).join("");
-    return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Wetten</th><th>Treffer</th><th>Einsätze</th><th>Rendite</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+    return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Wetten</th><th>Treffer</th>' +
+      (mitQuote ? '<th>Ø-Quote</th>' : '') + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
-  var active = null; /* null = seit Start, sonst "JJJJ-MM" (Reiter auf der Startseite) */
+  var active = null; /* null = neuestes Jahr, sonst Jahreszahl als Text (Reiter auf der Startseite) */
 
   function tabs(fixed) {
-    if (fixed) return "";
-    function btn(k, t, y) {
-      return '<button type="button" class="trk-tab" data-k="' + k + '" aria-pressed="' + ((active || "") === k ? "true" : "false") + '">' + t + (y ? '<span class="trk-tab-y"> ' + y + '</span>' : '') + '</button>';
-    }
-    /* Erste Zeile: Seit Start. Darunter die Monate, älteste zuerst, drei pro Zeile. */
-    return '<div class="trk-tabs" role="group" aria-label="Zeitraum">' +
-      '<div class="trk-tabs-start">' + btn("", "Seit Start") + '</div>' +
-      '<div class="trk-tabs-months">' + data.map(function (m) {
-        var p = m.monat.split("-");
-        return btn(m.monat, MONATE[parseInt(p[1], 10) - 1], p[0]);
+    if (fixed || jahre.length < 2) return "";
+    var cur = active || String(jahre[jahre.length - 1].jahr);
+    return '<div class="trk-tabs" role="group" aria-label="Zeitraum"><div class="trk-tabs-months">' +
+      jahre.slice().reverse().map(function (j) {
+        return '<button type="button" class="trk-tab" data-k="' + j.jahr + '" aria-pressed="' + (cur === String(j.jahr) ? "true" : "false") + '">Jahr ' + j.jahr + '</button>';
       }).join("") + '</div></div>';
   }
 
   function render() {
     var fixed = root.getAttribute("data-tr-monat");
-    var key = fixed || active;
-    var L, series, star, title, label;
     var W = Math.max(300, Math.min(960, body.clientWidth - 32 || 900));
-    if (key) {
-      var m = data.filter(function (x) { return x.monat === key; })[0] || data[data.length - 1];
-      key = m.monat; L = m.live;
-      var prev = 0, days = tage.filter(function (t) { return t.d.slice(0, 7) === key; });
-      tage.forEach(function (t) { if (t.d.slice(0, 7) < key) prev = t.g; });
-      series = days.map(function (t) { return { d: t.d, g: Math.round((t.g - prev) * 10) / 10, rr: !!t.rr }; });
-      star = !!m.rueckrechnung;
-      title = monthName(key);
-      label = "Kumulierte Einsätze je Tag im " + monthName(key) + ", Stand " + signed(gewinn(L), 1);
+    var hero, star, notes = "", key = null, fnSeries;
+    if (fixed) {
+      var m = data.filter(function (x) { return x.monat === fixed; })[0] || data[data.length - 1];
+      key = m.monat; star = !!m.rueckrechnung;
+      fnSeries = tage.filter(function (t) { return t.d.slice(0, 7) === key; });
+      hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">' + monthName(key) + (star ? '<sup class="trk-star">*</sup>' : '') + '</span></div>' +
+        nums(m.live) + '</section>';
     } else {
-      var S = window.TRACKRECORD_START, w = 0, t = 0, gw = 0;
-      if (S) { L = { wetten: S.wetten, treffer: S.treffer, rendite: S.rendite, gewinn: S.gewinn }; }
-      else {
-        data.forEach(function (x) { w += x.live.wetten; t += x.live.treffer; gw += gewinn(x.live); });
-        gw = Math.round(gw * 10) / 10;
-        L = { wetten: w, treffer: t, gewinn: gw, rendite: w ? Math.round(gw / w * 1000) / 10 : 0 };
+      var J = jahre.filter(function (x) { return String(x.jahr) === (active || String(jahre[jahre.length - 1].jahr)); })[0] || jahre[jahre.length - 1];
+      if (!J) {
+        hero = "";
+        star = data.some(function (x) { return x.rueckrechnung; });
+        fnSeries = [];
+      } else {
+        var series = tage.filter(function (t) { return t.d.slice(0, 4) === String(J.jahr); });
+        star = !!J.rueckrechnung;
+        fnSeries = series;
+        var ab = J.ab.slice(5) === "01-01" ? "" : " · ab " + dm(J.ab);
+        var freigabe = isNum(J.gewinn) && isNum(J.rendite);
+        hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Jahr ' + J.jahr + ab + ' · Stand ' + dmy(J.stand) +
+          (star ? '<sup class="trk-star">*</sup>' : '') + '</span>' +
+          (freigabe && series.length > 1 ? '<span class="trk-hero-sub">Kumulierte Einsätze je Tag</span>' : '') + '</div>' +
+          (freigabe ? chart(series, "Kumulierte Einsätze je Tag im Jahr " + J.jahr + ", Stand " + signed(J.gewinn, 1), W) : '') +
+          nums({ wetten: J.wetten, treffer: J.treffer, quote: J.quote, gewinn: freigabe ? J.gewinn : null, rendite: freigabe ? J.rendite : null }) +
+          (freigabe ? '' : '<p class="trk-foot">Einsätze und Rendite folgen, sobald das Jahr 100 Live-Wetten hat.</p>') + '</section>';
+        notes = series;
       }
-      series = tage.map(function (x) { return { d: x.d, g: x.g, rr: !!x.rr }; });
-      star = data.some(function (x) { return x.rueckrechnung; }) || series.some(function (x) { return x.rr; });
-      var first = series.length ? series[0].d : (data[0].monat + "-01");
-      var stand = (S && S.stand) || (series.length ? series[series.length - 1].d : "");
-      title = "Seit " + dmy(first) + (stand ? " · Stand " + dmy(stand) : "");
-      label = "Kumulierte Einsätze je Tag seit " + dmy(first) + ", Stand " + signed(gewinn(L), 1);
     }
     body.innerHTML =
-      tabs(!!fixed) +
-      '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">' + title + (star ? '<sup class="trk-star">*</sup>' : '') + '</span>' +
-        (series.length > 1 ? '<span class="trk-hero-sub">Kumulierte Einsätze je Tag</span>' : '') + '</div>' +
-        chart(series, label, W) + nums(L) + '</section>' +
-      table(key) +
-      (star ? '<p class="trk-foot">' + fussnote(series) + '</p>' : '') +
+      tabs(!!fixed) + hero + table(key) +
+      (star ? '<p class="trk-foot">' + fussnote(fnSeries || []) + '</p>' : '') +
+      '<p class="trk-foot">' + QUOTE_DEF + '</p>' +
+      '<p class="trk-foot">' + HINWEIS + '</p>' +
       '<p class="trk-foot">' + PFLICHT + '</p>' +
       '<p class="trk-foot">18+ · Keine Gewinngarantie</p>';
-    bindCursor(series);
+    if (notes && notes.length > 1) bindCursor(notes);
     Array.prototype.forEach.call(body.querySelectorAll(".trk-tab"), function (b) {
       b.addEventListener("click", function () { active = b.getAttribute("data-k") || null; render(); });
     });
