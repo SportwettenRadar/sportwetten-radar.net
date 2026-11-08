@@ -259,10 +259,11 @@ window.TRACKRECORD_TAGE = [
   {"d": "2026-11-03", "g": 4.4, "rr": false},
   {"d": "2026-11-04", "g": 4.8, "rr": false},
   {"d": "2026-11-05", "g": 3.8, "rr": false},
-  {"d": "2026-11-06", "g": 2.1, "rr": false}
+  {"d": "2026-11-06", "g": 2.1, "rr": false},
+  {"d": "2026-11-07", "g": -0.7, "rr": false}
 ];
 
 /* Kalenderjahre: Wetten, Treffer, Ø-Quote; gewinn (Einsätze) und rendite sind null, solange das Jahr unter 100 Live-Wetten hat. */
 window.TRACKRECORD_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-06", "wetten": 380, "treffer": 242, "quote": 1.58, "gewinn": 2.1, "rendite": 0.6, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-07", "wetten": 399, "treffer": 253, "quote": 1.57, "gewinn": -0.7, "rendite": -0.2, "rueckrechnung": true}
 ];
