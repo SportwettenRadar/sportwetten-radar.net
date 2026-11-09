@@ -1286,13 +1286,13 @@ section[id] { scroll-margin-top: 76px; }
 .trk-end { font-size: 17px; }
 .trk-cursor { stroke: var(--text-muted); stroke-width: 1; }
 .trk-tip { fill: var(--text); font-size: 12px; }
-.trk-nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 20px; margin: 0; padding: 6px 4px 0; }
+.trk-nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 20px; margin: 0; padding: 6px 4px 0; }
 .trk-nums div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .trk-nums dt { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
 .trk-nums dd { margin: 0; font-size: 15px; font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
 .trk-nums dd small { color: var(--text-muted); font-weight: 400; font-size: 13px; }
 .trk .trk-table-wrap { margin-top: 20px; }
-@media (max-width: 560px) { .trk-nums { grid-template-columns: 1fr 1fr; } .trk-hero { padding: 16px 8px 12px; } }
+@media (max-width: 560px) { .trk-nums { gap: 12px 8px; } .trk-nums dt { font-size: 9.5px; letter-spacing: 0.06em; } .trk-nums dd { font-size: 14px; } .trk-nums dd small { font-size: 11.5px; display: block; } .trk-hero { padding: 16px 8px 12px; } }
 
 /* Beta-Hinweis unter dem Trackrecord */
 .tr-beta { margin: 14px 0 0; font-size: 0.82rem; line-height: 1.5; color: var(--muted, #8aa0b5); text-align: left; }
