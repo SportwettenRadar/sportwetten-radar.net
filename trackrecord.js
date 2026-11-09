@@ -15,13 +15,13 @@
     var rr = series.filter(function (x) { return x.rr; });
     /* Komplett als Testphase gerechneter Zeitraum (z. B. September): Zeitraum der ganzen Testphase nennen */
     if (rr.length && rr.length === series.length) rr = tage.filter(function (x) { return x.rr; });
-    var von = rr.length ? rr[0].d : "2026-09-01", bis = rr.length ? rr[rr.length - 1].d : "2026-10-10";
+    var von = jahre.length ? jahre[0].ab : "2026-09-01", bis = rr.length ? rr[rr.length - 1].d : "2026-10-10";
     return "* " + dm(von) + "–" + dm(bis) + ": Testphase, mit den Regeln vom 11.10.2026 berechnet.";
   }
   var PFLICHT = "Alle Zahlen gelten bei gleichem Einsatz auf jede Live-Wette. Verlustserien gehören dazu.";
   var QUOTE_DEF = "Ø-Quote: Durchschnitt der Quoten aller gesetzten Live-Wetten im Zeitraum.";
-  var HINWEIS = "Break-even: Ab dieser Trefferquote (100 ÷ Ø-Quote) gleichen Treffer und Fehlschläge sich aus. " +
-    "Einsätze und Rendite zeigen wir hier nicht. Wir weisen sie je Kalenderjahr in unseren Telegram-Kanälen aus, sobald 100 Live-Wetten vorliegen.";
+  var BREAKEVEN = "Break-even: Ab dieser Trefferquote (100 ÷ Ø-Quote) gleichen Treffer und Fehlschläge sich aus.";
+  var HINWEIS = "Einsätze und Rendite zeigen wir hier nicht. Wir weisen sie je Kalenderjahr in unseren Telegram-Kanälen aus, sobald 100 Live-Wetten vorliegen.";
 
   var data = (window.TRACKRECORD || [])
     .filter(function (m) { return m && /^\d{4}-\d{2}$/.test(m.monat); })
@@ -124,7 +124,7 @@
   }
 
   /* Monatstabelle: Wetten, Treffer (mit Prozent), Ø-Quote (nur, wenn mindestens ein Monat sie hat) */
-  function table(activeKey) {
+  function table(activeKey, mitVs) {
     var mitQuote = data.some(function (m) { return isNum(m.live.quote); });
     var rows = data.slice().reverse().map(function (m) {
       var L = m.live, q = L.wetten > 0 ? L.treffer / L.wetten * 100 : 0;
@@ -134,10 +134,11 @@
       var cls = m.monat === activeKey ? ' class="is-active"' : "";
       return '<tr' + cls + '><th scope="row"><a href="monatsbericht-' + m.monat + '.html">' + name + '</a></th>' +
         '<td>' + L.wetten + '</td><td>' + L.treffer + ' (' + de(q, 1) + ' %)</td>' +
-        (mitQuote ? '<td>' + (isNum(L.quote) ? de(L.quote, 2) : "–") + '</td>' : '') + '</tr>';
+        (mitQuote ? '<td>' + (isNum(L.quote) ? de(L.quote, 2) : "–") + '</td>' : '') +
+        (mitVs ? '<td>' + (isNum(L.verlustserie) ? L.verlustserie : "–") + '</td>' : '') + '</tr>';
     }).join("");
     return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Wetten</th><th>Treffer</th>' +
-      (mitQuote ? '<th>Ø-Quote</th>' : '') + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+      (mitQuote ? '<th>Ø-Quote</th>' : '') + (mitVs ? '<th>Verlustserie</th>' : '') + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
   var active = null; /* null = neuestes Jahr, sonst Jahreszahl als Text (Reiter auf der Startseite) */
@@ -153,6 +154,7 @@
 
   function render() {
     var fixed = root.getAttribute("data-tr-monat");
+    var liste = root.hasAttribute("data-tr-liste");
     var W = Math.max(300, Math.min(960, body.clientWidth - 32 || 900));
     var hero, star, notes = "", key = null, fnSeries;
     if (fixed) {
@@ -183,10 +185,16 @@
         notes = series;
       }
     }
+    if (liste) {
+      /* Archiv: nur die Monatstabelle (mit längster Verlustserie), ohne Jahreskurve */
+      hero = ""; star = data.some(function (x) { return x.rueckrechnung; }); fnSeries = tage;
+    }
     body.innerHTML =
-      tabs(!!fixed) + hero + table(key) +
+      (liste ? "" : tabs(!!fixed)) + hero +
+      (liste ? table(null, true) : fixed ? table(key) : '<p class="trk-more"><a class="tr-alle" href="monatsberichte.html">Alle Monatsberichte ansehen →</a></p>') +
       (star ? '<p class="trk-foot">' + fussnote(fnSeries || []) + '</p>' : '') +
       '<p class="trk-foot">' + QUOTE_DEF + '</p>' +
+      (!fixed && !liste ? '<p class="trk-foot">' + BREAKEVEN + '</p>' : '') +
       '<p class="trk-foot">' + HINWEIS + '</p>' +
       '<p class="trk-foot">' + PFLICHT + '</p>' +
       '<p class="trk-foot">18+ · Keine Gewinngarantie</p>';

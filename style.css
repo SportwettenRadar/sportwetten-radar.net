@@ -1325,3 +1325,6 @@ section[id] { scroll-margin-top: 76px; }
 .hero .hero-actions { flex-direction: column; align-items: stretch; gap: 14px; max-width: 430px; margin-top: 30px; }
 .prices-foot .btn-cta { padding-left: 34px; padding-right: 34px; }
 @media (max-width: 560px) { .prices-foot .btn-cta, .prices-foot .btn-live { flex-basis: 100%; } }
+
+.trk-more { margin: 16px 0 6px; font-family: var(--font-mono); font-size: 14px; }
+.trk-more a { color: var(--accent); text-decoration: none; }
