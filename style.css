@@ -1328,3 +1328,8 @@ section[id] { scroll-margin-top: 76px; }
 
 .trk-more { margin: 16px 0 6px; font-family: var(--font-mono); font-size: 14px; }
 .trk-more a { color: var(--accent); text-decoration: none; }
+
+/* Fußnoten im Trackrecord: auf der Startseite nur die Testphase-Zeile unter dem Link, sonst ein kompakter Block */
+.trk p.trk-foot--start { margin: 2px 0 0; font-size: 12px; }
+.trk p.trk-foot--kompakt { margin: 22px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.6; text-align: left; hyphens: none; -webkit-hyphens: none; }
+.trk-more { margin-bottom: 2px; }

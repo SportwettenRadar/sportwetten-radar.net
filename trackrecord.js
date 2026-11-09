@@ -192,12 +192,8 @@
     body.innerHTML =
       (liste ? "" : tabs(!!fixed)) + hero +
       (liste ? table(null, true) : fixed ? table(key) : '<p class="trk-more"><a class="tr-alle" href="monatsberichte.html">Alle Monatsberichte ansehen →</a></p>') +
-      (star ? '<p class="trk-foot">' + fussnote(fnSeries || []) + '</p>' : '') +
-      '<p class="trk-foot">' + QUOTE_DEF + '</p>' +
-      (!fixed && !liste ? '<p class="trk-foot">' + BREAKEVEN + '</p>' : '') +
-      '<p class="trk-foot">' + HINWEIS + '</p>' +
-      '<p class="trk-foot">' + PFLICHT + '</p>' +
-      '<p class="trk-foot">18+ · Keine Gewinngarantie</p>';
+      (!fixed && !liste ? (star ? '<p class="trk-foot trk-foot--start">' + fussnote(fnSeries || []) + '</p>' : '') :
+        '<p class="trk-foot trk-foot--kompakt">' + (star ? fussnote(fnSeries || []) + ' ' : '') + QUOTE_DEF + ' ' + HINWEIS + ' ' + PFLICHT + ' 18+ · Keine Gewinngarantie</p>');
     if (notes && notes.length > 1) bindCursor(notes, (J && isNum(J.quote) && J.quote > 0) ? 100 / J.quote : null);
     Array.prototype.forEach.call(body.querySelectorAll(".trk-tab"), function (b) {
       b.addEventListener("click", function () { active = b.getAttribute("data-k") || null; render(); });
