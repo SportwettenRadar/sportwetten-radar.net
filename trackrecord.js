@@ -188,7 +188,7 @@
       var eser = einzTage.filter(function (t) { return t.d.slice(0, 4) === String(EJ.jahr); });
       star = !!EJ.rueckrechnung; fnSeries = eser; notes = eser;
       var eab = EJ.ab.slice(5) === "01-01" ? "" : " · ab " + dm(EJ.ab);
-      hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Einzelspiele · Jahr ' + EJ.jahr + eab + ' · Stand ' + dmy(EJ.stand) +
+      hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Jahr ' + EJ.jahr + eab + ' · Stand ' + dmy(EJ.stand) +
         (star ? '<sup class="trk-star">*</sup>' : '') + '</span>' +
         (eser.length > 1 ? '<span class="trk-hero-sub">Trefferquote kumuliert</span>' : '') + '</div>' +
         (eser.length > 1 ? chart(eser, "Kumulierte Trefferquote der Einzelspiele je Tag im Jahr " + EJ.jahr + ", Stand " + de(eser[eser.length - 1].q, 1) + " Prozent", W, null, EJ.tipps, EJ.treffer) : '') +
