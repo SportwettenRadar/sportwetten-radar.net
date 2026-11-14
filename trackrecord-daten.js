@@ -7,6 +7,7 @@
    - Einsätze und Rendite stehen NICHT auf der Homepage (nur in den Telegram-Kanälen, je Kalenderjahr ab 100 Live-Wetten).
    - Jahreskurve: kumulierte Trefferquote je Tag, erst ab 100 Live-Wetten im Jahr, Beginn ab 20 Wetten (Entscheidung 09.11.2026).
    - Ø-Quote = Durchschnitt der Quoten aller gesetzten Live-Wetten des Zeitraums.
+   - Einzelspiele (Daniel, 14.11.2026): eigene Kurve der kumulierten Trefferquote (ohne Quote, ohne Break-even), gleiche Schwellen (Beginn ab 20, Veröffentlichung ab 100 Tipps im Jahr).
    ===================================================================== */
 
 window.TRACKRECORD = [
@@ -283,4 +284,67 @@ window.TRACKRECORD_TAGE = [
 /* Kalenderjahre: Wetten, Treffer, Ø-Quote; keine Einsätze/Rendite. */
 window.TRACKRECORD_JAHRE = [
   {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-13", "wetten": 425, "treffer": 273, "quote": 1.56, "rueckrechnung": true}
+];
+
+/* Einzelspiele zum Kombinieren: kumulierte Trefferquote je Tag (ohne Quote, ohne Break-even) und Kalenderjahre (Tipps, Treffer). Ein Jahr erscheint erst ab 100 Tipps. */
+window.TRACKRECORD_EINZEL_TAGE = [
+  {"d": "2026-09-19", "q": 79.2, "rr": true},
+  {"d": "2026-09-20", "q": 72.4, "rr": true},
+  {"d": "2026-09-21", "q": 75.0, "rr": true},
+  {"d": "2026-09-22", "q": 75.0, "rr": true},
+  {"d": "2026-09-23", "q": 75.0, "rr": true},
+  {"d": "2026-09-24", "q": 75.0, "rr": true},
+  {"d": "2026-09-25", "q": 76.5, "rr": true},
+  {"d": "2026-09-26", "q": 76.9, "rr": true},
+  {"d": "2026-09-27", "q": 79.5, "rr": true},
+  {"d": "2026-09-28", "q": 80.9, "rr": true},
+  {"d": "2026-09-29", "q": 80.9, "rr": true},
+  {"d": "2026-09-30", "q": 79.6, "rr": true},
+  {"d": "2026-10-01", "q": 80.4, "rr": true},
+  {"d": "2026-10-02", "q": 78.2, "rr": true},
+  {"d": "2026-10-03", "q": 78.3, "rr": true},
+  {"d": "2026-10-04", "q": 80.0, "rr": true},
+  {"d": "2026-10-05", "q": 80.0, "rr": true},
+  {"d": "2026-10-06", "q": 79.1, "rr": true},
+  {"d": "2026-10-07", "q": 80.6, "rr": true},
+  {"d": "2026-10-08", "q": 80.5, "rr": true},
+  {"d": "2026-10-09", "q": 80.5, "rr": true},
+  {"d": "2026-10-10", "q": 80.5, "rr": true},
+  {"d": "2026-10-11", "q": 80.4, "rr": false},
+  {"d": "2026-10-12", "q": 81.4, "rr": false},
+  {"d": "2026-10-13", "q": 78.4, "rr": false},
+  {"d": "2026-10-14", "q": 78.5, "rr": false},
+  {"d": "2026-10-15", "q": 79.5, "rr": false},
+  {"d": "2026-10-16", "q": 79.3, "rr": false},
+  {"d": "2026-10-17", "q": 80.2, "rr": false},
+  {"d": "2026-10-18", "q": 80.2, "rr": false},
+  {"d": "2026-10-19", "q": 80.8, "rr": false},
+  {"d": "2026-10-20", "q": 81.5, "rr": false},
+  {"d": "2026-10-21", "q": 81.4, "rr": false},
+  {"d": "2026-10-22", "q": 82.1, "rr": false},
+  {"d": "2026-10-23", "q": 81.3, "rr": false},
+  {"d": "2026-10-24", "q": 80.0, "rr": false},
+  {"d": "2026-10-25", "q": 80.0, "rr": false},
+  {"d": "2026-10-26", "q": 80.0, "rr": false},
+  {"d": "2026-10-27", "q": 79.4, "rr": false},
+  {"d": "2026-10-28", "q": 79.4, "rr": false},
+  {"d": "2026-10-29", "q": 80.0, "rr": false},
+  {"d": "2026-10-30", "q": 79.5, "rr": false},
+  {"d": "2026-10-31", "q": 78.9, "rr": false},
+  {"d": "2026-11-01", "q": 79.0, "rr": false},
+  {"d": "2026-11-02", "q": 79.0, "rr": false},
+  {"d": "2026-11-03", "q": 78.5, "rr": false},
+  {"d": "2026-11-04", "q": 78.6, "rr": false},
+  {"d": "2026-11-05", "q": 78.6, "rr": false},
+  {"d": "2026-11-06", "q": 79.1, "rr": false},
+  {"d": "2026-11-07", "q": 78.7, "rr": false},
+  {"d": "2026-11-08", "q": 78.3, "rr": false},
+  {"d": "2026-11-09", "q": 78.0, "rr": false},
+  {"d": "2026-11-10", "q": 78.0, "rr": false},
+  {"d": "2026-11-11", "q": 78.0, "rr": false},
+  {"d": "2026-11-12", "q": 78.0, "rr": false},
+  {"d": "2026-11-13", "q": 78.0, "rr": false}
+];
+window.TRACKRECORD_EINZEL_JAHRE = [
+  {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-13", "tipps": 232, "treffer": 181, "rueckrechnung": true}
 ];

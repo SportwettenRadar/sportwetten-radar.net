@@ -28,6 +28,11 @@
     .sort(function (a, b) { return a.monat < b.monat ? -1 : 1; });
   var tage = (window.TRACKRECORD_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var jahre = (window.TRACKRECORD_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
+  /* Einzelspiele zum Kombinieren: eigene Kurve (kumulierte Trefferquote), ohne Quote und ohne Break-even */
+  var einzTage = (window.TRACKRECORD_EINZEL_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
+  var einzJahre = (window.TRACKRECORD_EINZEL_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
+  var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier keinen Break-even und keine Rendite.";
+  var modus = "live";
 
   if (!data.length) {
     body.innerHTML = '<p class="trk-empty">Der erste Monatsbericht erscheint am 1. des kommenden Monats.</p>';
@@ -94,6 +99,11 @@
     var marks = [0];
     for (var k = 1; k < n - 8; k++) if (series[k].d.slice(8) === "01") marks.push(k);
     marks.push(n - 1);
+    /* Datumsmarken nicht übereinanderlegen: Marke weglassen, wenn sie der vorigen oder (bei Mittelmarken) der letzten zu nah kommt */
+    marks = marks.filter(function (k, idx) {
+      if (idx === 0 || k === n - 1) return true;
+      return X(k) - X(marks[0]) >= 64 && (W - R) - X(k) >= 64;
+    });
     marks.forEach(function (k, idx) {
       g += '<text class="trk-ax" x="' + (k === n - 1 ? W - R : X(k)).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="' + (idx === 0 ? "start" : k === n - 1 ? "end" : "middle") + '">' + dm(series[k].d) + '</text>';
     });
@@ -141,6 +151,21 @@
       (mitQuote ? '<th>Ø-Quote</th>' : '') + (mitVs ? '<th>Verlustserie</th>' : '') + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
+  function modusSchalter(fixed, liste) {
+    if (fixed || liste || !einzJahre.length) return "";
+    return '<div class="trk-tabs" role="group" aria-label="Angebot"><div class="trk-tabs-months">' +
+      [["live", "Live-Wetten"], ["einzel", "Einzelspiele"]].map(function (m) {
+        return '<button type="button" class="trk-tab" data-modus="' + m[0] + '" aria-pressed="' + (modus === m[0] ? "true" : "false") + '">' + m[1] + '</button>';
+      }).join("") + '</div></div>';
+  }
+
+  /* Einzelspiele: Kennzahlen (Tipps, Treffer mit Prozent), keine Ø-Quote */
+  function numsEinzel(J) {
+    var q = J.tipps > 0 ? J.treffer / J.tipps * 100 : 0;
+    return '<dl class="trk-nums"><div><dt>Tipps</dt><dd>' + J.tipps + '</dd></div>' +
+      '<div><dt>Treffer</dt><dd>' + J.treffer + ' <small>(' + de(q, 1) + ' %)</small></dd></div></dl>';
+  }
+
   var active = null; /* null = neuestes Jahr, sonst Jahreszahl als Text (Reiter auf der Startseite) */
 
   function tabs(fixed) {
@@ -156,8 +181,19 @@
     var fixed = root.getAttribute("data-tr-monat");
     var liste = root.hasAttribute("data-tr-liste");
     var W = Math.max(300, Math.min(960, body.clientWidth - 32 || 900));
-    var hero, star, notes = "", key = null, fnSeries;
-    if (fixed) {
+    var hero, star, notes = "", key = null, fnSeries, einzel = false;
+    if (!fixed && !liste && modus === "einzel" && einzJahre.length) {
+      einzel = true;
+      var EJ = einzJahre.filter(function (x) { return String(x.jahr) === (active || String(einzJahre[einzJahre.length - 1].jahr)); })[0] || einzJahre[einzJahre.length - 1];
+      var eser = einzTage.filter(function (t) { return t.d.slice(0, 4) === String(EJ.jahr); });
+      star = !!EJ.rueckrechnung; fnSeries = eser; notes = eser;
+      var eab = EJ.ab.slice(5) === "01-01" ? "" : " · ab " + dm(EJ.ab);
+      hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Einzelspiele · Jahr ' + EJ.jahr + eab + ' · Stand ' + dmy(EJ.stand) +
+        (star ? '<sup class="trk-star">*</sup>' : '') + '</span>' +
+        (eser.length > 1 ? '<span class="trk-hero-sub">Trefferquote kumuliert</span>' : '') + '</div>' +
+        (eser.length > 1 ? chart(eser, "Kumulierte Trefferquote der Einzelspiele je Tag im Jahr " + EJ.jahr + ", Stand " + de(eser[eser.length - 1].q, 1) + " Prozent", W, null, EJ.tipps, EJ.treffer) : '') +
+        numsEinzel(EJ) + '<p class="trk-foot">' + EINZEL_HINWEIS + '</p></section>';
+    } else if (fixed) {
       var m = data.filter(function (x) { return x.monat === fixed; })[0] || data[data.length - 1];
       key = m.monat; star = !!m.rueckrechnung;
       fnSeries = tage.filter(function (t) { return t.d.slice(0, 7) === key; });
@@ -190,12 +226,15 @@
       hero = ""; star = data.some(function (x) { return x.rueckrechnung; }); fnSeries = tage;
     }
     body.innerHTML =
-      (liste ? "" : tabs(!!fixed)) + hero +
+      (liste ? "" : modusSchalter(!!fixed, liste) + (einzel ? "" : tabs(!!fixed))) + hero +
       (liste ? table(null, true) : fixed ? table(key) : '<p class="trk-more"><a class="tr-alle" href="monatsberichte.html">Alle Monatsberichte ansehen →</a></p>') +
       (!fixed && !liste ? (star ? '<p class="trk-foot trk-foot--start">' + fussnote(fnSeries || []) + '</p>' : '') :
         '<p class="trk-foot trk-foot--kompakt">' + (star ? fussnote(fnSeries || []) + ' ' : '') + QUOTE_DEF + ' ' + HINWEIS + ' ' + PFLICHT + ' 18+ · Keine Gewinngarantie</p>');
-    if (notes && notes.length > 1) bindCursor(notes, (J && isNum(J.quote) && J.quote > 0) ? 100 / J.quote : null);
-    Array.prototype.forEach.call(body.querySelectorAll(".trk-tab"), function (b) {
+    if (notes && notes.length > 1) bindCursor(notes, (!einzel && J && isNum(J.quote) && J.quote > 0) ? 100 / J.quote : null);
+    Array.prototype.forEach.call(body.querySelectorAll("[data-modus]"), function (b) {
+      b.addEventListener("click", function () { modus = b.getAttribute("data-modus"); render(); });
+    });
+    Array.prototype.forEach.call(body.querySelectorAll(".trk-tab[data-k]"), function (b) {
       b.addEventListener("click", function () { active = b.getAttribute("data-k") || null; render(); });
     });
   }
