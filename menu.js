@@ -6,11 +6,25 @@
   var grid = document.querySelector("footer .footer-grid");
   if (!btn || !panel || !grid) return;
 
+  /* Wird vom Generator gepflegt (tools/seiten_generator.py, menu_neu): jüngste Erklärseite, nur im Menü hervorgehoben */
+  /*NEU-START*/ var NEU_SEITE = {"href": "einzelwette-oder-kombiwette.html", "text": "Einzelwette oder Kombiwette?"}; /*NEU-ENDE*/
+
   var inner = document.createElement("div");
   inner.className = "wrap site-menu-grid";
   Array.prototype.slice.call(grid.children).forEach(function (col) {
     inner.appendChild(col.cloneNode(true));
   });
+  var wl = inner.querySelector("h4") && Array.prototype.slice.call(inner.querySelectorAll("h4")).filter(function (h) { return h.textContent.trim() === "Wissen"; })[0];
+  var wul = wl && wl.parentNode.querySelector("ul");
+  if (wul && NEU_SEITE) {
+    var li = document.createElement("li");
+    li.className = "menu-neu";
+    var a = document.createElement("a");
+    a.href = NEU_SEITE.href;
+    a.textContent = "\u2605 Neu: " + NEU_SEITE.text;
+    li.appendChild(a);
+    wul.insertBefore(li, wul.firstChild);
+  }
   panel.appendChild(inner);
 
   function setOpen(open) {
