@@ -216,6 +216,21 @@ window.TRACKRECORD_WOCHEN = [
       tipps: 12,
       treffer: 9
     }
+  },
+  {
+    monat: "2026-11",
+    von: "2026-11-16",
+    bis: "2026-11-22",
+    live: {
+      wetten: 47,
+      treffer: 33,
+      quote: 1.44,
+      verlustserie: 2
+    },
+    einzelspiele: {
+      tipps: 20,
+      treffer: 13
+    }
   }
 ];
 
@@ -301,12 +316,13 @@ window.TRACKRECORD_TAGE = [
   {"d": "2026-11-18", "q": 64.4, "rr": false},
   {"d": "2026-11-19", "q": 64.4, "rr": false},
   {"d": "2026-11-20", "q": 64.8, "rr": false},
-  {"d": "2026-11-21", "q": 64.7, "rr": false}
+  {"d": "2026-11-21", "q": 64.7, "rr": false},
+  {"d": "2026-11-22", "q": 64.8, "rr": false}
 ];
 
 /* Kalenderjahre: Wetten, Treffer, Ø-Quote; keine Einsätze/Rendite. */
 window.TRACKRECORD_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-21", "wetten": 470, "treffer": 304, "quote": 1.55, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-22", "wetten": 483, "treffer": 313, "quote": 1.55, "rueckrechnung": true}
 ];
 
 /* Einzelspiele zum Kombinieren: kumulierte Trefferquote je Tag (ohne Quote, ohne Break-even) und Kalenderjahre (Tipps, Treffer). Ein Jahr erscheint erst ab 100 Tipps. */
@@ -374,8 +390,9 @@ window.TRACKRECORD_EINZEL_TAGE = [
   {"d": "2026-11-18", "q": 78.0, "rr": false},
   {"d": "2026-11-19", "q": 77.7, "rr": false},
   {"d": "2026-11-20", "q": 78.2, "rr": false},
-  {"d": "2026-11-21", "q": 77.4, "rr": false}
+  {"d": "2026-11-21", "q": 77.4, "rr": false},
+  {"d": "2026-11-22", "q": 77.1, "rr": false}
 ];
 window.TRACKRECORD_EINZEL_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-21", "tipps": 257, "treffer": 199, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-22", "tipps": 262, "treffer": 202, "rueckrechnung": true}
 ];
