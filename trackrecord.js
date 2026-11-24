@@ -32,7 +32,7 @@
   var einzTage = (window.TRACKRECORD_EINZEL_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var mrTage = (window.TRACKRECORD_MR_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var mrJahre = (window.TRACKRECORD_MR_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
-  var MR_HINWEIS = "Money Race: immer nur ein Tipp zur selben Zeit. Die Trefferquote gilt je Tipp, abgebrochene oder verschobene Tipps zählen wir getrennt und nicht als Treffer. Einsätze, Euro-Beträge und Rendite zeigen wir hier nicht. Verlustserien gehören dazu.";
+  var MR_HINWEIS = "Money Race: immer nur ein Tipp zur selben Zeit. Die Trefferquote gilt je Tipp, abgebrochene oder verschobene Tipps zählen wir getrennt und nicht als Treffer. Ein Tag läuft wie bei den Live-Wetten von 08:00 bis 08:00 Uhr. Einsätze, Euro-Beträge und Rendite zeigen wir hier nicht. Verlustserien gehören dazu.";
   var MR_LEER = "Hier erscheinen die Ergebnisse von Money Race, sobald die Auswertung vorliegt. Die Jahreskurve folgt, sobald das Jahr 100 Tipps hat.";
   var einzJahre = (window.TRACKRECORD_EINZEL_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
   var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier keinen Break-even und keine Rendite.";
@@ -174,7 +174,7 @@
     if (!rows) return '<p class="trk-empty">Der erste Monatsbericht der Einzelspiele erscheint am 1. des kommenden Monats.</p>';
     return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Tipps</th><th>Treffer</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
-  /* Archiv Money Race: Tipps, Treffer, Ø-Quote, längste Verlustserie je Monat (Kalendertag-Basis, keine Euro, keine Rendite) */
+  /* Archiv Money Race: Tipps, Treffer, Ø-Quote, längste Verlustserie je Monat (Betriebstag 08:00 bis 08:00, keine Euro, keine Rendite) */
   function tableMR() {
     var rows = data.slice().reverse().filter(function (m) { return m.moneyrace && isNum(m.moneyrace.tipps); }).map(function (m) {
       var M = m.moneyrace, q = M.tipps > 0 ? M.treffer / M.tipps * 100 : 0;
