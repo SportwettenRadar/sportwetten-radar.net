@@ -230,6 +230,25 @@ window.TRACKRECORD_WOCHEN = [
     einzelspiele: {
       tipps: 20,
       treffer: 13
+    },
+    moneyrace: {
+      tipps: 61,
+      treffer: 48,
+      quote: 1.3,
+      verlustserie: 3,
+      abgebrochen: 0,
+      serien: {
+        gestartet: 14,
+        "beendet_step1": 4,
+        "beendet_step2": 1,
+        "beendet_step3_4": 4,
+        "beendet_ab5": 4,
+        "erreicht5": 3,
+        "erreicht10": 2,
+        "erreicht15": 0,
+        "erreicht20": 0
+      },
+      ab: "2026-11-20"
     }
   }
 ];
@@ -397,4 +416,12 @@ window.TRACKRECORD_EINZEL_TAGE = [
 ];
 window.TRACKRECORD_EINZEL_JAHRE = [
   {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-23", "tipps": 267, "treffer": 204, "rueckrechnung": true}
+];
+
+/* Money Race (Kalendertag): kumulierte Trefferquote je Tag und Kalenderjahre (Tipps, Treffer, Ø-Quote). Ein Jahr erscheint erst ab 100 Tipps. Keine Euro, keine Rendite. */
+window.TRACKRECORD_MR_TAGE = [
+
+];
+window.TRACKRECORD_MR_JAHRE = [
+
 ];

@@ -229,7 +229,7 @@
       if (m.einzelspiele && isNum(m.einzelspiele.tipps)) hero += teil("Einzelspiele", numsEinzel(m.einzelspiele));
       if (m.moneyrace && isNum(m.moneyrace.tipps)) {
         var MM = m.moneyrace, mqq = MM.tipps > 0 ? MM.treffer / MM.tipps * 100 : 0;
-        hero += teil("Money Race" + (key === "2026-11" ? " · ab 21.11." : ""),
+        hero += teil("Money Race" + (MM.ab ? " · ab " + dm(MM.ab) : ""),
           '<dl class="trk-nums"><div><dt>Tipps</dt><dd>' + MM.tipps + '</dd></div><div><dt>Treffer</dt><dd>' + MM.treffer + ' <small>(' + de(mqq, 1) + ' %)</small></dd></div>' +
           (isNum(MM.quote) ? '<div><dt>Ø-Quote</dt><dd>' + de(MM.quote, 2) + '</dd></div>' : '') +
           (isNum(MM.verlustserie) ? '<div><dt>Längste Verlustserie</dt><dd>' + MM.verlustserie + '</dd></div>' : '') + '</dl>');
