@@ -37,6 +37,11 @@
   var einzJahre = (window.TRACKRECORD_EINZEL_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
   var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier keinen Break-even und keine Rendite.";
   var modus = "live";
+  if (root.hasAttribute("data-tr-liste")) {
+    var hsh = (location.hash || "").replace("#", "");
+    if (hsh === "money-race") modus = "mr"; else if (hsh === "einzelspiele") modus = "einzel";
+  }
+  var MAX_JAHRE = 3; /* aktuelles Jahr und die zwei Vorjahre; ältere Jahre fallen heraus */
 
   if (!data.length) {
     body.innerHTML = '<p class="trk-empty">Der erste Monatsbericht erscheint am 1. des kommenden Monats.</p>';
@@ -155,8 +160,34 @@
       (mitQuote ? '<th>Ø-Quote</th>' : '') + (mitVs ? '<th>Verlustserie</th>' : '') + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
+  function monatsKurz(m, stern) {
+    var mn = monthName(m.monat);
+    if ((body.clientWidth || 640) < 480) mn = MONATE[parseInt(m.monat.slice(5), 10) - 1].slice(0, 3) + " " + m.monat.slice(2, 4);
+    return '<th scope="row"><a href="monatsbericht-' + m.monat + '.html">' + mn + (stern && m.rueckrechnung ? "*" : "") + '</a></th>';
+  }
+  /* Archiv Einzelspiele: Tipps und Treffer je Monat (keine Ø-Quote) */
+  function tableEinzel() {
+    var rows = data.slice().reverse().filter(function (m) { return m.einzelspiele && isNum(m.einzelspiele.tipps); }).map(function (m) {
+      var E = m.einzelspiele, q = E.tipps > 0 ? E.treffer / E.tipps * 100 : 0;
+      return '<tr>' + monatsKurz(m, true) + '<td>' + E.tipps + '</td><td>' + E.treffer + ' (' + de(q, 1) + ' %)</td></tr>';
+    }).join("");
+    if (!rows) return '<p class="trk-empty">Der erste Monatsbericht der Einzelspiele erscheint am 1. des kommenden Monats.</p>';
+    return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Tipps</th><th>Treffer</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+  /* Archiv Money Race: Tipps, Treffer, Ø-Quote, längste Verlustserie je Monat (Kalendertag-Basis, keine Euro, keine Rendite) */
+  function tableMR() {
+    var rows = data.slice().reverse().filter(function (m) { return m.moneyrace && isNum(m.moneyrace.tipps); }).map(function (m) {
+      var M = m.moneyrace, q = M.tipps > 0 ? M.treffer / M.tipps * 100 : 0;
+      return '<tr>' + monatsKurz(m, false) + '<td>' + M.tipps + '</td><td>' + M.treffer + ' (' + de(q, 1) + ' %)</td><td>' + (isNum(M.quote) ? de(M.quote, 2) : "–") +
+        '</td><td>' + (isNum(M.verlustserie) ? M.verlustserie : "–") + '</td></tr>';
+    }).join("");
+    if (!rows) return '<p class="trk-empty">Der erste Money-Race-Monatsbericht erscheint am 1. Dezember 2026 (Money Race läuft seit 20.11.2026).</p>';
+    return '<div class="trk-table-wrap"><table class="trk-table"><thead><tr><th>Monat</th><th>Tipps</th><th>Treffer</th><th>Ø-Quote</th><th>Verlustserie</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<p class="trk-foot">' + MR_HINWEIS + '</p>';
+  }
+
   function modusSchalter(fixed, liste) {
-    if (fixed || liste) return "";
+    if (fixed) return "";
     return '<div class="trk-tabs" role="group" aria-label="Angebot"><div class="trk-tabs-months">' +
       [["live", "Live-Wetten"], ["mr", "Money Race"], ["einzel", "Einzelspiele"]].map(function (m) {
         return '<button type="button" class="trk-tab" data-modus="' + m[0] + '" aria-pressed="' + (modus === m[0] ? "true" : "false") + '">' + m[1] + '</button>';
@@ -172,11 +203,18 @@
 
   var active = null; /* null = neuestes Jahr, sonst Jahreszahl als Text (Reiter auf der Startseite) */
 
-  function tabs(fixed) {
-    if (fixed || jahre.length < 2) return "";
-    var cur = active || String(jahre[jahre.length - 1].jahr);
+  function letzte(list) { return list.slice(-MAX_JAHRE); }
+  function jahrWahl(list) {
+    var l = letzte(list);
+    return l.filter(function (x) { return String(x.jahr) === active; })[0] || l[l.length - 1];
+  }
+  /* Reiter je Angebot: erscheint, sobald es mindestens zwei Jahre gibt; zeigt das aktuelle und die zwei Vorjahre */
+  function tabs(fixed, list) {
+    var l = letzte(list || []);
+    if (fixed || l.length < 2) return "";
+    var cur = String(jahrWahl(list).jahr);
     return '<div class="trk-tabs" role="group" aria-label="Zeitraum"><div class="trk-tabs-months">' +
-      jahre.slice().reverse().map(function (j) {
+      l.slice().reverse().map(function (j) {
         return '<button type="button" class="trk-tab" data-k="' + j.jahr + '" aria-pressed="' + (cur === String(j.jahr) ? "true" : "false") + '">Jahr ' + j.jahr + '</button>';
       }).join("") + '</div></div>';
   }
@@ -193,7 +231,7 @@
         hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Money Race</span></div><p class="trk-foot">' + MR_LEER + '</p><p class="trk-foot">' + MR_HINWEIS + '</p></section>';
         fnSeries = []; notes = [];
       } else {
-        var MJ = mrJahre[mrJahre.length - 1];
+        var MJ = jahrWahl(mrJahre);
         var mser = mrTage.filter(function (x) { return x.d.slice(0, 4) === String(MJ.jahr); });
         fnSeries = mser; notes = mser;
         mrBe = isNum(MJ.quote) && MJ.quote > 0 ? 100 / MJ.quote : null;
@@ -210,7 +248,7 @@
       }
     } else if (!fixed && !liste && modus === "einzel" && einzJahre.length) {
       einzel = true;
-      var EJ = einzJahre.filter(function (x) { return String(x.jahr) === (active || String(einzJahre[einzJahre.length - 1].jahr)); })[0] || einzJahre[einzJahre.length - 1];
+      var EJ = jahrWahl(einzJahre);
       var eser = einzTage.filter(function (t) { return t.d.slice(0, 4) === String(EJ.jahr); });
       star = !!EJ.rueckrechnung; fnSeries = eser; notes = eser;
       var eab = EJ.ab.slice(5) === "01-01" ? "" : " · ab " + dm(EJ.ab);
@@ -237,7 +275,7 @@
         hero += teil("Money Race", '<p class="trk-foot">Die Auswertung von Money Race für diesen Monat folgt.</p>');
       }
     } else {
-      var J = jahre.filter(function (x) { return String(x.jahr) === (active || String(jahre[jahre.length - 1].jahr)); })[0] || jahre[jahre.length - 1];
+      var J = jahre.length ? jahrWahl(jahre) : null;
       if (!J) {
         hero = "";
         star = data.some(function (x) { return x.rueckrechnung; });
@@ -263,13 +301,15 @@
       hero = ""; star = data.some(function (x) { return x.rueckrechnung; }); fnSeries = tage;
     }
     body.innerHTML =
-      (liste ? "" : modusSchalter(!!fixed, liste) + (einzel ? "" : tabs(!!fixed))) + hero +
-      (liste ? table(null, true) : fixed ? table(key) : '<p class="trk-more"><a class="tr-alle" href="monatsberichte.html">Alle Monatsberichte ansehen →</a></p>') +
+      (liste ? modusSchalter(false, false) : modusSchalter(!!fixed, liste) + tabs(!!fixed, modus === "mr" ? mrJahre : modus === "einzel" ? einzJahre : jahre)) + hero +
+      (liste ? (modus === "mr" ? tableMR() : modus === "einzel" ? tableEinzel() : table(null, true)) : fixed ? table(key) : '<p class="trk-more"><a class="tr-alle" href="monatsberichte.html' + (modus === "mr" ? "#money-race" : modus === "einzel" ? "#einzelspiele" : "") + '">Alle Monatsberichte ansehen →</a></p>') +
       (!fixed && !liste ? (star ? '<p class="trk-foot trk-foot--start">' + fussnote(fnSeries || []) + '</p>' : '') :
-        '<p class="trk-foot trk-foot--kompakt">' + (star ? fussnote(fnSeries || []) + ' ' : '') + QUOTE_DEF + ' ' + HINWEIS + ' ' + PFLICHT + ' 18+ · Keine Gewinngarantie</p>');
+        '<p class="trk-foot trk-foot--kompakt">' + (liste && modus === "mr" ? "" :
+          liste && modus === "einzel" ? (star ? fussnote(fnSeries || []) + ' ' : '') + EINZEL_HINWEIS + ' ' :
+          (star ? fussnote(fnSeries || []) + ' ' : '') + QUOTE_DEF + ' ' + HINWEIS + ' ' + PFLICHT + ' ') + '18+ · Keine Gewinngarantie</p>');
     if (notes && notes.length > 1) bindCursor(notes, einzel ? mrBe : ((J && isNum(J.quote) && J.quote > 0) ? 100 / J.quote : null));
     Array.prototype.forEach.call(body.querySelectorAll("[data-modus]"), function (b) {
-      b.addEventListener("click", function () { modus = b.getAttribute("data-modus"); render(); });
+      b.addEventListener("click", function () { modus = b.getAttribute("data-modus"); active = null; render(); });
     });
     Array.prototype.forEach.call(body.querySelectorAll(".trk-tab[data-k]"), function (b) {
       b.addEventListener("click", function () { active = b.getAttribute("data-k") || null; render(); });
