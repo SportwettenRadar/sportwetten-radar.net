@@ -7,7 +7,7 @@
   if (!btn || !panel || !grid) return;
 
   /* Wird vom Generator gepflegt (tools/seiten_generator.py, menu_neu): jüngste Erklärseite, nur im Menü hervorgehoben */
-  /*NEU-START*/ var NEU_SEITE = {"href": "einzelwette-oder-kombiwette.html", "text": "Einzelwette oder Kombiwette?"}; /*NEU-ENDE*/
+  /*NEU-START*/ var NEU_SEITE = {"href": "erwartungswert-sportwetten.html", "text": "Erwartungswert bei Sportwetten"}; /*NEU-ENDE*/
 
   var inner = document.createElement("div");
   inner.className = "wrap site-menu-grid";
