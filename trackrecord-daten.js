@@ -232,18 +232,19 @@ window.TRACKRECORD_WOCHEN = [
       treffer: 13
     },
     moneyrace: {
-      tipps: 61,
-      treffer: 48,
+      basis: "betriebstag",
+      tipps: 65,
+      treffer: 51,
       quote: 1.3,
       verlustserie: 3,
       abgebrochen: 0,
       serien: {
-        gestartet: 14,
+        gestartet: 15,
         "beendet_step1": 4,
         "beendet_step2": 1,
         "beendet_step3_4": 4,
-        "beendet_ab5": 4,
-        "erreicht5": 3,
+        "beendet_ab5": 5,
+        "erreicht5": 4,
         "erreicht10": 2,
         "erreicht15": 0,
         "erreicht20": 0
