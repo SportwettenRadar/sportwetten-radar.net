@@ -1411,3 +1411,9 @@ footer .footer-grid { grid-template-columns: 1fr; gap: 26px; }
 
 /* Menü: jüngste Erklärseite hervorgehoben (nur im Dropdown) */
 .site-menu-grid .menu-neu a { color: var(--accent); font-weight: 600; }
+
+/* Drei Angebote */
+.cards.cards-3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .cards.cards-3 { grid-template-columns: 1fr; } }
+.trk-hero--teil { margin-top: 14px; }
+.trk-teil-titel { margin: 6px 0 0; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }

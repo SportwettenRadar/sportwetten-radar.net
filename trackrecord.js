@@ -30,6 +30,10 @@
   var jahre = (window.TRACKRECORD_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
   /* Einzelspiele zum Kombinieren: eigene Kurve (kumulierte Trefferquote), ohne Quote und ohne Break-even */
   var einzTage = (window.TRACKRECORD_EINZEL_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
+  var mrTage = (window.TRACKRECORD_MR_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
+  var mrJahre = (window.TRACKRECORD_MR_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
+  var MR_HINWEIS = "Money Race: immer nur ein Tipp zur selben Zeit. Die Trefferquote gilt je Tipp, abgebrochene oder verschobene Tipps zählen wir getrennt und nicht als Treffer. Einsätze, Euro-Beträge und Rendite zeigen wir hier nicht. Verlustserien gehören dazu.";
+  var MR_LEER = "Hier erscheinen die Ergebnisse von Money Race, sobald die Auswertung vorliegt. Die Jahreskurve folgt, sobald das Jahr 100 Tipps hat.";
   var einzJahre = (window.TRACKRECORD_EINZEL_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
   var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier keinen Break-even und keine Rendite.";
   var modus = "live";
@@ -152,9 +156,9 @@
   }
 
   function modusSchalter(fixed, liste) {
-    if (fixed || liste || !einzJahre.length) return "";
+    if (fixed || liste) return "";
     return '<div class="trk-tabs" role="group" aria-label="Angebot"><div class="trk-tabs-months">' +
-      [["live", "Live-Wetten"], ["einzel", "Einzelspiele"]].map(function (m) {
+      [["live", "Live-Wetten"], ["mr", "Money Race"], ["einzel", "Einzelspiele"]].map(function (m) {
         return '<button type="button" class="trk-tab" data-modus="' + m[0] + '" aria-pressed="' + (modus === m[0] ? "true" : "false") + '">' + m[1] + '</button>';
       }).join("") + '</div></div>';
   }
@@ -181,8 +185,30 @@
     var fixed = root.getAttribute("data-tr-monat");
     var liste = root.hasAttribute("data-tr-liste");
     var W = Math.max(300, Math.min(960, body.clientWidth - 32 || 900));
-    var hero, star, notes = "", key = null, fnSeries, einzel = false;
-    if (!fixed && !liste && modus === "einzel" && einzJahre.length) {
+    var hero, star, notes = "", key = null, fnSeries, einzel = false, mrBe = null;
+    if (!fixed && !liste && modus === "mr") {
+      einzel = true;
+      star = false;
+      if (!mrJahre.length) {
+        hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Money Race</span></div><p class="trk-foot">' + MR_LEER + '</p><p class="trk-foot">' + MR_HINWEIS + '</p></section>';
+        fnSeries = []; notes = [];
+      } else {
+        var MJ = mrJahre[mrJahre.length - 1];
+        var mser = mrTage.filter(function (x) { return x.d.slice(0, 4) === String(MJ.jahr); });
+        fnSeries = mser; notes = mser;
+        mrBe = isNum(MJ.quote) && MJ.quote > 0 ? 100 / MJ.quote : null;
+        var mq = MJ.tipps > 0 ? MJ.treffer / MJ.tipps * 100 : 0;
+        var mfrei = mser.length > 1;
+        hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Money Race · ab ' + dm(MJ.ab) + ' · Stand ' + dmy(MJ.stand) + '</span>' +
+          (mfrei ? '<span class="trk-hero-sub">Trefferquote kumuliert' + (mrBe ? ' · Break-even ' + de(mrBe, 1) + ' % bei Ø-Quote ' + de(MJ.quote, 2) : '') + '</span>' : '') + '</div>' +
+          (mfrei ? chart(mser, "Kumulierte Trefferquote Money Race je Tag im Jahr " + MJ.jahr + ", Stand " + de(mser[mser.length - 1].q, 1) + " Prozent", W, mrBe, MJ.tipps, MJ.treffer) : '') +
+          '<dl class="trk-nums"><div><dt>Tipps</dt><dd>' + MJ.tipps + '</dd></div><div><dt>Treffer</dt><dd>' + MJ.treffer + ' <small>(' + de(mq, 1) + ' %)</small></dd></div>' +
+          (isNum(MJ.quote) ? '<div><dt>Ø-Quote</dt><dd>' + de(MJ.quote, 2) + '</dd></div>' : '') +
+          (isNum(MJ.verlustserie) ? '<div><dt>Längste Verlustserie</dt><dd>' + MJ.verlustserie + '</dd></div>' : '') + '</dl>' +
+          (mfrei ? '' : '<p class="trk-foot">Die Jahreskurve folgt, sobald das Jahr 100 Tipps hat.</p>') +
+          '<p class="trk-foot">' + MR_HINWEIS + '</p></section>';
+      }
+    } else if (!fixed && !liste && modus === "einzel" && einzJahre.length) {
       einzel = true;
       var EJ = einzJahre.filter(function (x) { return String(x.jahr) === (active || String(einzJahre[einzJahre.length - 1].jahr)); })[0] || einzJahre[einzJahre.length - 1];
       var eser = einzTage.filter(function (t) { return t.d.slice(0, 4) === String(EJ.jahr); });
@@ -197,8 +223,19 @@
       var m = data.filter(function (x) { return x.monat === fixed; })[0] || data[data.length - 1];
       key = m.monat; star = !!m.rueckrechnung;
       fnSeries = tage.filter(function (t) { return t.d.slice(0, 7) === key; });
+      var teil = function (titel, inner) { return '<section class="trk-hero trk-hero--teil"><div class="trk-hero-head"><span class="trk-hero-title">' + titel + '</span></div>' + inner + '</section>'; };
       hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">' + monthName(key) + (star ? '<sup class="trk-star">*</sup>' : '') + '</span></div>' +
-        nums(m.live) + '</section>';
+        '<p class="trk-teil-titel">Live-Wetten</p>' + nums(m.live) + '</section>';
+      if (m.einzelspiele && isNum(m.einzelspiele.tipps)) hero += teil("Einzelspiele", numsEinzel(m.einzelspiele));
+      if (m.moneyrace && isNum(m.moneyrace.tipps)) {
+        var MM = m.moneyrace, mqq = MM.tipps > 0 ? MM.treffer / MM.tipps * 100 : 0;
+        hero += teil("Money Race" + (key === "2026-11" ? " · ab 21.11." : ""),
+          '<dl class="trk-nums"><div><dt>Tipps</dt><dd>' + MM.tipps + '</dd></div><div><dt>Treffer</dt><dd>' + MM.treffer + ' <small>(' + de(mqq, 1) + ' %)</small></dd></div>' +
+          (isNum(MM.quote) ? '<div><dt>Ø-Quote</dt><dd>' + de(MM.quote, 2) + '</dd></div>' : '') +
+          (isNum(MM.verlustserie) ? '<div><dt>Längste Verlustserie</dt><dd>' + MM.verlustserie + '</dd></div>' : '') + '</dl>');
+      } else if (key >= "2026-11") {
+        hero += teil("Money Race", '<p class="trk-foot">Die Auswertung von Money Race für diesen Monat folgt.</p>');
+      }
     } else {
       var J = jahre.filter(function (x) { return String(x.jahr) === (active || String(jahre[jahre.length - 1].jahr)); })[0] || jahre[jahre.length - 1];
       if (!J) {
@@ -230,7 +267,7 @@
       (liste ? table(null, true) : fixed ? table(key) : '<p class="trk-more"><a class="tr-alle" href="monatsberichte.html">Alle Monatsberichte ansehen →</a></p>') +
       (!fixed && !liste ? (star ? '<p class="trk-foot trk-foot--start">' + fussnote(fnSeries || []) + '</p>' : '') :
         '<p class="trk-foot trk-foot--kompakt">' + (star ? fussnote(fnSeries || []) + ' ' : '') + QUOTE_DEF + ' ' + HINWEIS + ' ' + PFLICHT + ' 18+ · Keine Gewinngarantie</p>');
-    if (notes && notes.length > 1) bindCursor(notes, (!einzel && J && isNum(J.quote) && J.quote > 0) ? 100 / J.quote : null);
+    if (notes && notes.length > 1) bindCursor(notes, einzel ? mrBe : ((J && isNum(J.quote) && J.quote > 0) ? 100 / J.quote : null));
     Array.prototype.forEach.call(body.querySelectorAll("[data-modus]"), function (b) {
       b.addEventListener("click", function () { modus = b.getAttribute("data-modus"); render(); });
     });
