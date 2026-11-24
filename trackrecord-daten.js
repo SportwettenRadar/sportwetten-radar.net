@@ -7,7 +7,7 @@
    - Einsätze und Rendite stehen NICHT auf der Homepage (nur in den Telegram-Kanälen, je Kalenderjahr ab 100 Live-Wetten).
    - Jahreskurve: kumulierte Trefferquote je Tag, erst ab 100 Live-Wetten im Jahr, Beginn ab 20 Wetten (Entscheidung 09.11.2026).
    - Ø-Quote = Durchschnitt der Quoten aller gesetzten Live-Wetten des Zeitraums.
-   - Einzelspiele (Daniel, 14.11.2026): eigene Kurve der kumulierten Trefferquote (ohne Quote, ohne Break-even), gleiche Schwellen (Beginn ab 20, Veröffentlichung ab 100 Tipps im Jahr).
+   - Einzelspiele (Daniel, 14.11.2026): eigene Kurve der kumulierten Trefferquote (ohne Quote), gleiche Schwellen (Beginn ab 20, Veröffentlichung ab 100 Tipps im Jahr).
    ===================================================================== */
 
 window.TRACKRECORD = [
@@ -346,7 +346,7 @@ window.TRACKRECORD_JAHRE = [
   {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-23", "wetten": 486, "treffer": 314, "quote": 1.55, "rueckrechnung": true}
 ];
 
-/* Einzelspiele zum Kombinieren: kumulierte Trefferquote je Tag (ohne Quote, ohne Break-even) und Kalenderjahre (Tipps, Treffer). Ein Jahr erscheint erst ab 100 Tipps. */
+/* Einzelspiele zum Kombinieren: kumulierte Trefferquote je Tag (ohne Quote) und Kalenderjahre (Tipps, Treffer). Ein Jahr erscheint erst ab 100 Tipps. */
 window.TRACKRECORD_EINZEL_TAGE = [
   {"d": "2026-09-19", "q": 79.2, "rr": true},
   {"d": "2026-09-20", "q": 72.4, "rr": true},

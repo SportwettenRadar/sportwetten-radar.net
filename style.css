@@ -1348,7 +1348,6 @@ section[id] { scroll-margin-top: 76px; }
 
 /* Produkt: Kacheln mit Symbol */
 :is(.site-menu-grid, .footer-grid) > div:nth-child(1) ul { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-:is(.site-menu-grid, .footer-grid) > div:nth-child(1) li:last-child { grid-column: 1 / -1; }
 :is(.site-menu-grid, .footer-grid) > div:nth-child(1) a {
   display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; min-height: 84px;
   padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px;
@@ -1356,14 +1355,8 @@ section[id] { scroll-margin-top: 76px; }
   color: var(--text); font-size: 14.5px; font-weight: 500;
   transition: border-color .15s ease, transform .15s ease;
 }
-:is(.site-menu-grid, .footer-grid) > div:nth-child(1) li:last-child a { flex-direction: row; align-items: center; justify-content: flex-start; min-height: 0; }
 :is(.site-menu-grid, .footer-grid) > div:nth-child(1) a:hover { border-color: var(--accent); transform: translateY(-1px); color: var(--text); }
-:is(.site-menu-grid, .footer-grid) > div:nth-child(1) a::before { content: ""; width: 24px; height: 24px; background-repeat: no-repeat; background-size: contain; }
-:is(.site-menu-grid, .footer-grid) a[href="#produkt"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232ee6a6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 2 4 14h7l-1 8 9-12h-7z'/%3E%3C/svg%3E"); }
-:is(.site-menu-grid, .footer-grid) li:nth-child(2) a[href="#produkt"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232ee6a6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='m12 8 3.5 2.5-1.3 4h-4.4l-1.3-4z'/%3E%3C/svg%3E"); }
-:is(.site-menu-grid, .footer-grid) a[href="#trackrecord"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232ee6a6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 17 5-6 4 4 8-9M3 21h18'/%3E%3C/svg%3E"); }
-:is(.site-menu-grid, .footer-grid) a[href="#preise"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232ee6a6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m20 12-8 8-9-9V3h8z'/%3E%3Ccircle cx='7.5' cy='7.5' r='1.2'/%3E%3C/svg%3E"); }
-:is(.site-menu-grid, .footer-grid) a[href="#saison"]::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232ee6a6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='5' width='16' height='15' rx='2'/%3E%3Cpath d='M4 10h16M9 3v4M15 3v4'/%3E%3C/svg%3E"); }
+:is(.site-menu-grid, .footer-grid) > div:nth-child(1) a .ico { width: 24px; height: 24px; flex: none; display: block; }
 
 /* Wissen: eine Karte mit Trennlinien und Pfeil */
 :is(.site-menu-grid, .footer-grid) > div:nth-child(2) ul { gap: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); overflow: hidden; }

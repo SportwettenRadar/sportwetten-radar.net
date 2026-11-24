@@ -1,7 +1,7 @@
 /* Trackrecord — liest window.TRACKRECORD (Monate), window.TRACKRECORD_JAHRE (Kalenderjahre)
    und window.TRACKRECORD_TAGE (kumulierte Trefferquote in % je Tag, je Jahr neu beginnend) aus trackrecord-daten.js.
    Anzeige-Regeln: Monate zeigen Wetten, Treffer (mit Prozent) und Ø-Quote. Einsätze und Rendite gibt es auf der Homepage nicht.
-   Die Jahreskurve (Trefferquote mit Break-even) erscheint erst ab 100 Live-Wetten im Jahr.
+   Die Jahreskurve (Trefferquote) erscheint erst ab 100 Live-Wetten im Jahr.
    Startseite und Übersicht: Jahr + Monatstabelle. Monatsseiten: <div data-tr data-tr-monat="JJJJ-MM">.
    Diese Datei muss für neue Monate nicht angefasst werden. */
 (function () {
@@ -20,22 +20,21 @@
   }
   var PFLICHT = "Alle Zahlen gelten bei gleichem Einsatz auf jede Live-Wette. Verlustserien gehören dazu.";
   var QUOTE_DEF = "Ø-Quote: Durchschnitt der Quoten aller gesetzten Live-Wetten im Zeitraum.";
-  var BREAKEVEN = "Break-even: Ab dieser Trefferquote (100 ÷ Ø-Quote) gleichen Treffer und Fehlschläge sich aus.";
-  var HINWEIS = "Einsätze und Rendite zeigen wir hier nicht. Wir weisen sie je Kalenderjahr in unseren Telegram-Kanälen aus, sobald 100 Live-Wetten vorliegen.";
+  var HINWEIS = "Einsätze und Rendite zeigen wir hier nicht. In den Telegram-Kanälen findest du die ausführliche Auswertung: Rendite in Prozent und gewonnene Einheiten je Kalenderjahr (ab 100 Live-Wetten im Jahr).";
 
   var data = (window.TRACKRECORD || [])
     .filter(function (m) { return m && /^\d{4}-\d{2}$/.test(m.monat); })
     .sort(function (a, b) { return a.monat < b.monat ? -1 : 1; });
   var tage = (window.TRACKRECORD_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var jahre = (window.TRACKRECORD_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
-  /* Einzelspiele zum Kombinieren: eigene Kurve (kumulierte Trefferquote), ohne Quote und ohne Break-even */
+  /* Einzelspiele zum Kombinieren: eigene Kurve (kumulierte Trefferquote), ohne Quote */
   var einzTage = (window.TRACKRECORD_EINZEL_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var mrTage = (window.TRACKRECORD_MR_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var mrJahre = (window.TRACKRECORD_MR_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
-  var MR_HINWEIS = "Money Race: immer nur ein Tipp zur selben Zeit. Die Trefferquote gilt je Tipp, abgebrochene oder verschobene Tipps zählen wir getrennt und nicht als Treffer. Ein Tag läuft wie bei den Live-Wetten von 08:00 bis 08:00 Uhr. Einsätze, Euro-Beträge und Rendite zeigen wir hier nicht. Verlustserien gehören dazu.";
+  var MR_HINWEIS = "Money Race: immer nur ein Tipp zur selben Zeit. Die Trefferquote gilt je Tipp, abgebrochene oder verschobene Tipps zählen wir getrennt und nicht als Treffer. Ein Tag läuft wie bei den Live-Wetten von 08:00 bis 08:00 Uhr. Einsätze, Euro-Beträge und Rendite zeigen wir hier nicht. Die ausführliche Auswertung findest du in den Telegram-Kanälen. Verlustserien gehören dazu.";
   var MR_LEER = "Hier erscheinen die Ergebnisse von Money Race, sobald die Auswertung vorliegt. Die Jahreskurve folgt, sobald das Jahr 100 Tipps hat.";
   var einzJahre = (window.TRACKRECORD_EINZEL_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
-  var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier keinen Break-even und keine Rendite.";
+  var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier nur die Trefferquote. Die ausführliche Auswertung findest du in den Telegram-Kanälen.";
   var modus = "live";
   if (root.hasAttribute("data-tr-liste")) {
     var hsh = (location.hash || "").replace("#", "");
@@ -66,7 +65,7 @@
     '</dl>';
   }
 
-  /* Skala der Jahreskurve: Trefferquote in %, auf 5-%-Schritte gerundet, die Gewinnschwelle (100 ÷ Ø-Quote) liegt immer im Bild */
+  /* Skala der Jahreskurve: Trefferquote in %, auf 5-%-Schritte gerundet, */
   function scale(series, be) {
     var vals = series.map(function (s) { return s.q; });
     if (isNum(be)) vals.push(be);
@@ -75,7 +74,7 @@
   }
 
   /* Die große Kurve (nur Jahr, nur ab 100 Wetten): kumulierte Trefferquote je Tag, Skala am rechten Rand,
-     Gewinnschwelle (100 ÷ Ø-Quote) gestrichelt, letzter Wert als Punkt mit Beschriftung, Bereich ab Livestart hinterlegt. */
+     letzter Wert als Punkt mit Beschriftung, Bereich ab Livestart hinterlegt. */
   function chart(series, label, W, be, wetten, treffer) {
     if (series.length < 2) return "";
     var H = W < 520 ? 300 : Math.round(W * 0.46);
@@ -95,10 +94,6 @@
            '<text class="trk-ax trk-ax--live" x="' + (X(li - 0.5) + 8).toFixed(1) + '" y="' + (T + 14) + '">live</text>';
     } else if (li === 0) {
       g += '<text class="trk-ax trk-ax--live" x="' + (L + 8) + '" y="' + (T + 14) + '">live</text>';
-    }
-    if (isNum(be)) {
-      g += '<line class="trk-zero" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(be).toFixed(1) + '" y2="' + Y(be).toFixed(1) + '"/>' +
-           '<text class="trk-ax" x="' + (W - R + 8) + '" y="' + (Y(be) + 16).toFixed(1) + '">Break-even</text>';
     }
     g += '<polyline class="trk-curve" points="' + series.map(function (s, k) { return X(k).toFixed(1) + "," + Y(s.q).toFixed(1); }).join(" ") + '"/>';
     var last = series[n - 1], lx = X(n - 1), ly = Y(last.q);
@@ -234,12 +229,11 @@
         var MJ = jahrWahl(mrJahre);
         var mser = mrTage.filter(function (x) { return x.d.slice(0, 4) === String(MJ.jahr); });
         fnSeries = mser; notes = mser;
-        mrBe = isNum(MJ.quote) && MJ.quote > 0 ? 100 / MJ.quote : null;
         var mq = MJ.tipps > 0 ? MJ.treffer / MJ.tipps * 100 : 0;
         var mfrei = mser.length > 1;
         hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Money Race · ab ' + dm(MJ.ab) + ' · Stand ' + dmy(MJ.stand) + '</span>' +
-          (mfrei ? '<span class="trk-hero-sub">Trefferquote kumuliert' + (mrBe ? ' · Break-even ' + de(mrBe, 1) + ' % bei Ø-Quote ' + de(MJ.quote, 2) : '') + '</span>' : '') + '</div>' +
-          (mfrei ? chart(mser, "Kumulierte Trefferquote Money Race je Tag im Jahr " + MJ.jahr + ", Stand " + de(mser[mser.length - 1].q, 1) + " Prozent", W, mrBe, MJ.tipps, MJ.treffer) : '') +
+          (mfrei ? '<span class="trk-hero-sub">Trefferquote kumuliert' + (isNum(MJ.quote) ? ' · Ø-Quote ' + de(MJ.quote, 2) : '') + '</span>' : '') + '</div>' +
+          (mfrei ? chart(mser, "Kumulierte Trefferquote Money Race je Tag im Jahr " + MJ.jahr + ", Stand " + de(mser[mser.length - 1].q, 1) + " Prozent", W, null, MJ.tipps, MJ.treffer) : '') +
           '<dl class="trk-nums"><div><dt>Tipps</dt><dd>' + MJ.tipps + '</dd></div><div><dt>Treffer</dt><dd>' + MJ.treffer + ' <small>(' + de(mq, 1) + ' %)</small></dd></div>' +
           (isNum(MJ.quote) ? '<div><dt>Ø-Quote</dt><dd>' + de(MJ.quote, 2) + '</dd></div>' : '') +
           (isNum(MJ.verlustserie) ? '<div><dt>Längste Verlustserie</dt><dd>' + MJ.verlustserie + '</dd></div>' : '') + '</dl>' +
@@ -286,11 +280,10 @@
         fnSeries = series;
         var ab = J.ab.slice(5) === "01-01" ? "" : " · ab " + dm(J.ab);
         var freigabe = series.length > 1;
-        var be = isNum(J.quote) && J.quote > 0 ? 100 / J.quote : null;
         hero = '<section class="trk-hero"><div class="trk-hero-head"><span class="trk-hero-title">Jahr ' + J.jahr + ab + ' · Stand ' + dmy(J.stand) +
           (star ? '<sup class="trk-star">*</sup>' : '') + '</span>' +
-          (freigabe ? '<span class="trk-hero-sub">Trefferquote kumuliert' + (be ? ' · Break-even ' + de(be, 1) + ' % bei Ø-Quote ' + de(J.quote, 2) : '') + '</span>' : '') + '</div>' +
-          (freigabe ? chart(series, "Kumulierte Trefferquote je Tag im Jahr " + J.jahr + ", Stand " + de(series[series.length - 1].q, 1) + " Prozent", W, be, J.wetten, J.treffer) : '') +
+          (freigabe ? '<span class="trk-hero-sub">Trefferquote kumuliert' + (isNum(J.quote) ? ' · Ø-Quote ' + de(J.quote, 2) : '') + '</span>' : '') + '</div>' +
+          (freigabe ? chart(series, "Kumulierte Trefferquote je Tag im Jahr " + J.jahr + ", Stand " + de(series[series.length - 1].q, 1) + " Prozent", W, null, J.wetten, J.treffer) : '') +
           nums({ wetten: J.wetten, treffer: J.treffer, quote: J.quote }) +
           (freigabe ? '' : '<p class="trk-foot">Die Jahreskurve folgt, sobald das Jahr 100 Live-Wetten hat.</p>') + '</section>';
         notes = series;
@@ -307,7 +300,7 @@
         '<p class="trk-foot trk-foot--kompakt">' + (liste && modus === "mr" ? "" :
           liste && modus === "einzel" ? (star ? fussnote(fnSeries || []) + ' ' : '') + EINZEL_HINWEIS + ' ' :
           (star ? fussnote(fnSeries || []) + ' ' : '') + QUOTE_DEF + ' ' + HINWEIS + ' ' + PFLICHT + ' ') + '18+ · Keine Gewinngarantie</p>');
-    if (notes && notes.length > 1) bindCursor(notes, einzel ? mrBe : ((J && isNum(J.quote) && J.quote > 0) ? 100 / J.quote : null));
+    if (notes && notes.length > 1) bindCursor(notes, null);
     Array.prototype.forEach.call(body.querySelectorAll("[data-modus]"), function (b) {
       b.addEventListener("click", function () { modus = b.getAttribute("data-modus"); active = null; render(); });
     });
