@@ -1398,7 +1398,7 @@ section[id] { scroll-margin-top: 76px; }
 /* Fußzeile: gleiche Bausteine, Markenzeile oben */
 footer .wrap { display: flex; flex-direction: column; }
 footer .footer-brand { order: -1; display: flex; align-items: center; gap: 12px; margin: 0 0 28px; color: var(--text-muted); font-size: 14px; }
-footer .footer-brand::before { content: ""; width: 36px; height: 36px; flex: none; background: url("assets/logo-icon-small.png") center/contain no-repeat; }
+footer .footer-brand::before { content: ""; width: 36px; height: 36px; flex: none; background: url("assets/logo-ring-small.png") center/contain no-repeat; }
 footer .footer-grid { grid-template-columns: 1fr; gap: 26px; }
 @media (min-width: 761px) { footer .footer-grid { grid-template-columns: 1.15fr 1fr 1fr; gap: 28px 32px; } }
 
