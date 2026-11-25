@@ -20,7 +20,7 @@
   }
   var PFLICHT = "Alle Zahlen gelten bei gleichem Einsatz auf jede Live-Wette. Verlustserien gehören dazu.";
   var QUOTE_DEF = "Ø-Quote: Durchschnitt der Quoten aller gesetzten Live-Wetten im Zeitraum.";
-  var HINWEIS = "Einsätze und Rendite zeigen wir hier nicht. In den Telegram-Kanälen findest du die ausführliche Auswertung: Rendite in Prozent und gewonnene Einheiten je Kalenderjahr (ab 100 Live-Wetten im Jahr).";
+  var HINWEIS = "Einsätze und Rendite: im Mitgliederkanal.";
 
   var data = (window.TRACKRECORD || [])
     .filter(function (m) { return m && /^\d{4}-\d{2}$/.test(m.monat); })
@@ -31,10 +31,10 @@
   var einzTage = (window.TRACKRECORD_EINZEL_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var mrTage = (window.TRACKRECORD_MR_TAGE || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
   var mrJahre = (window.TRACKRECORD_MR_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
-  var MR_HINWEIS = "Money Race: immer nur ein Tipp zur selben Zeit. Die Trefferquote gilt je Tipp, abgebrochene oder verschobene Tipps zählen wir getrennt und nicht als Treffer. Ein Tag läuft wie bei den Live-Wetten von 08:00 bis 08:00 Uhr. Einsätze, Euro-Beträge und Rendite zeigen wir hier nicht. Die ausführliche Auswertung findest du in den Telegram-Kanälen. Verlustserien gehören dazu.";
+  var MR_HINWEIS = "Money Race: immer nur ein Tipp zur selben Zeit. Die Trefferquote gilt je Tipp, abgebrochene oder verschobene Tipps zählen wir getrennt und nicht als Treffer. Ein Tag läuft wie bei den Live-Wetten von 08:00 bis 08:00 Uhr. Einsätze und Rendite: im Mitgliederkanal. Verlustserien gehören dazu.";
   var MR_LEER = "Hier erscheinen die Ergebnisse von Money Race, sobald die Auswertung vorliegt. Die Jahreskurve folgt, sobald das Jahr 100 Tipps hat.";
   var einzJahre = (window.TRACKRECORD_EINZEL_JAHRE || []).slice().sort(function (a, b) { return a.jahr - b.jahr; });
-  var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier nur die Trefferquote. Die ausführliche Auswertung findest du in den Telegram-Kanälen.";
+  var EINZEL_HINWEIS = "Die Trefferquote gilt je Einzelspiel. Eine Kombi gewinnt nur, wenn alle ihre Tipps treffen. Eine einheitliche Quote gibt es nicht, deshalb zeigen wir hier nur die Trefferquote. Einsätze und Rendite: im Mitgliederkanal.";
   var modus = "live";
   if (root.hasAttribute("data-tr-liste")) {
     var hsh = (location.hash || "").replace("#", "");
