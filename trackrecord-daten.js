@@ -338,12 +338,13 @@ window.TRACKRECORD_TAGE = [
   {"d": "2026-11-20", "q": 64.8, "rr": false},
   {"d": "2026-11-21", "q": 64.7, "rr": false},
   {"d": "2026-11-22", "q": 64.8, "rr": false},
-  {"d": "2026-11-23", "q": 64.6, "rr": false}
+  {"d": "2026-11-23", "q": 64.6, "rr": false},
+  {"d": "2026-11-24", "q": 64.8, "rr": false}
 ];
 
 /* Kalenderjahre: Wetten, Treffer, Ø-Quote; keine Einsätze/Rendite. */
 window.TRACKRECORD_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-23", "wetten": 486, "treffer": 314, "quote": 1.55, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-24", "wetten": 491, "treffer": 318, "quote": 1.55, "rueckrechnung": true}
 ];
 
 /* Einzelspiele zum Kombinieren: kumulierte Trefferquote je Tag (ohne Quote) und Kalenderjahre (Tipps, Treffer). Ein Jahr erscheint erst ab 100 Tipps. */
@@ -413,10 +414,11 @@ window.TRACKRECORD_EINZEL_TAGE = [
   {"d": "2026-11-20", "q": 78.2, "rr": false},
   {"d": "2026-11-21", "q": 77.4, "rr": false},
   {"d": "2026-11-22", "q": 77.1, "rr": false},
-  {"d": "2026-11-23", "q": 76.4, "rr": false}
+  {"d": "2026-11-23", "q": 76.4, "rr": false},
+  {"d": "2026-11-24", "q": 75.7, "rr": false}
 ];
 window.TRACKRECORD_EINZEL_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-23", "tipps": 267, "treffer": 204, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-24", "tipps": 272, "treffer": 206, "rueckrechnung": true}
 ];
 
 /* Money Race (Kalendertag): kumulierte Trefferquote je Tag und Kalenderjahre (Tipps, Treffer, Ø-Quote). Ein Jahr erscheint erst ab 100 Tipps. Keine Euro, keine Rendite. */
