@@ -341,12 +341,13 @@ window.TRACKRECORD_TAGE = [
   {"d": "2026-11-23", "q": 64.6, "rr": false},
   {"d": "2026-11-24", "q": 64.8, "rr": false},
   {"d": "2026-11-25", "q": 65.0, "rr": false},
-  {"d": "2026-11-26", "q": 65.0, "rr": false}
+  {"d": "2026-11-26", "q": 65.0, "rr": false},
+  {"d": "2026-11-27", "q": 65.1, "rr": false}
 ];
 
 /* Kalenderjahre: Wetten, Treffer, Ø-Quote; keine Einsätze/Rendite. */
 window.TRACKRECORD_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-26", "wetten": 503, "treffer": 327, "quote": 1.54, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-01", "stand": "2026-11-27", "wetten": 513, "treffer": 334, "quote": 1.54, "rueckrechnung": true}
 ];
 
 /* Einzelspiele zum Kombinieren: kumulierte Trefferquote je Tag (ohne Quote) und Kalenderjahre (Tipps, Treffer). Ein Jahr erscheint erst ab 100 Tipps. */
@@ -419,10 +420,11 @@ window.TRACKRECORD_EINZEL_TAGE = [
   {"d": "2026-11-23", "q": 76.4, "rr": false},
   {"d": "2026-11-24", "q": 75.7, "rr": false},
   {"d": "2026-11-25", "q": 75.8, "rr": false},
-  {"d": "2026-11-26", "q": 75.9, "rr": false}
+  {"d": "2026-11-26", "q": 75.9, "rr": false},
+  {"d": "2026-11-27", "q": 76.3, "rr": false}
 ];
 window.TRACKRECORD_EINZEL_JAHRE = [
-  {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-26", "tipps": 282, "treffer": 214, "rueckrechnung": true}
+  {"jahr": 2026, "ab": "2026-09-15", "stand": "2026-11-27", "tipps": 287, "treffer": 219, "rueckrechnung": true}
 ];
 
 /* Money Race (Kalendertag): kumulierte Trefferquote je Tag und Kalenderjahre (Tipps, Treffer, Ø-Quote). Ein Jahr erscheint erst ab 100 Tipps. Keine Euro, keine Rendite. */
@@ -432,8 +434,9 @@ window.TRACKRECORD_MR_TAGE = [
   {"d": "2026-11-23", "q": 79.3},
   {"d": "2026-11-24", "q": 80.0},
   {"d": "2026-11-25", "q": 79.1},
-  {"d": "2026-11-26", "q": 79.8}
+  {"d": "2026-11-26", "q": 79.8},
+  {"d": "2026-11-27", "q": 78.8}
 ];
 window.TRACKRECORD_MR_JAHRE = [
-  {"jahr": 2026, "ab": "2026-11-20", "stand": "2026-11-26", "tipps": 119, "treffer": 95, "quote": 1.29, "verlustserie": 3}
+  {"jahr": 2026, "ab": "2026-11-20", "stand": "2026-11-27", "tipps": 137, "treffer": 108, "quote": 1.29, "verlustserie": 3}
 ];
